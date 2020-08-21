@@ -55,7 +55,7 @@
       <td title="Reporting subject">{{ report.subject }}</td>
       <td title="Reporting type">{{ report.type }}</td>
 
-      <td title="Resource remaining" *ngIf="report.remaining !== null">{{ report.remaining | f_percent }}</td>
+      <td title="Last reported value" *ngIf="report.remaining !== null">{{ report.remaining | f_percent }}</td>
       <td *ngIf="!report.remaining"></td>
 
       <td [title]="report.updated_at | date:'yyyy-MM-dd HH:mm:ss'">

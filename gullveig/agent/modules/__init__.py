@@ -17,4 +17,10 @@ def get_int_marker_for_percentage(value: float, warn_at: float, critical_at: flo
 
 
 def get_resource_remaining_percent(used, total):
+    if used is None:
+        used = 0
+
+    if 0 == total or total is None:
+        return 0
+
     return 100 - ((used / total) * 100)

@@ -41,7 +41,7 @@
           <td title="Agent module">{{ item.mod }}</td>
           <td title="Reporting subject">{{ item.subject }}</td>
           <td title="Reporting type">{{ item.type }}</td>
-          <td title="Resource remaining" *ngIf="item.remaining !== null">{{ item.remaining | f_percent }}</td>
+          <td title="Last reported value" *ngIf="item.remaining !== null">{{ item.remaining | f_percent }}</td>
           <td *ngIf="item.remaining === null">-</td>
           <td [title]="item.updated_at| date:'yyyy-MM-dd HH:mm:ss'">
             {{ item.updated_at | f_ts_ago }}
