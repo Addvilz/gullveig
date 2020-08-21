@@ -1,0 +1,56 @@
+@import "~nord/src/sass/nord";
+
+:host {
+  box-sizing: border-box;
+  min-height: 100%;
+
+  #global-loader {
+    position: fixed;
+    top: 64px;
+    left: 0;
+    right: 0;
+    z-index: 999999999;
+  }
+
+  .mat-toolbar {
+    position: fixed;
+    z-index: 9999999;
+
+    .mat-button:not(.logo) {
+      font-weight: 400;
+    }
+
+    .mat-button:not(:last-child) {
+      margin-right: 0.5rem;
+    }
+
+    .spacer {
+      flex: 1 1 auto;
+    }
+
+    .logo {
+      font-weight: 800;
+
+      img {
+        height: 20px;
+        image-rendering: optimizeQuality;
+      }
+    }
+
+    .help, .sign-out, .update {
+      color: #222;
+    }
+
+    .github img {
+      height: 20px;
+      image-rendering: optimizeQuality;
+    }
+  }
+
+  .content {
+    box-sizing: border-box;
+    padding-top: 64px;
+    position: relative;
+    height: 100%;
+  }
+}

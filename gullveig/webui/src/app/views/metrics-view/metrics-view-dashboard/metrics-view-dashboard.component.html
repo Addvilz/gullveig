@@ -1,0 +1,38 @@
+<app-no-data *ngIf="!metrics || 0===metrics.length"></app-no-data>
+<section *ngIf="!!metrics && metrics.length > 0">
+  <div class="left">
+    <mat-action-list dense>
+      <div mat-subheader>
+        <b>{{ident.value}}</b>
+      </div>
+      <mat-list-item role="listitem" (click)="select(null)">
+        Show all
+      </mat-list-item>
+      <div mat-subheader>
+        <mat-button-toggle-group class="tiny-toggle" #periodSelect="matButtonToggleGroup" [value]="period.value" (change)="period.next(periodSelect.value)">
+          <mat-button-toggle value="sec" title="By second">S</mat-button-toggle>
+          <mat-button-toggle value="min" title="By minute">M</mat-button-toggle>
+          <mat-button-toggle value="hou" title="By hour">H</mat-button-toggle>
+          <mat-button-toggle value="day" title="By day">D</mat-button-toggle>
+          <mat-button-toggle value="wee" title="By week">W</mat-button-toggle>
+          <mat-button-toggle value="mon" title="By month">Mo</mat-button-toggle>
+          <mat-button-toggle value="yea" title="By year">Y</mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
+      <mat-divider></mat-divider>
+      <div mat-subheader>Metrics</div>
+      <mat-list-item [class.active]="record.c == selected" role="listitem" (click)="select(record.c)" *ngFor="let record of metrics">
+        {{ record.mod }} {{ record.metric }} {{ record.subject }}
+      </mat-list-item>
+    </mat-action-list>
+  </div>
+  <div class="right">
+    <div class="chart-item" [id]="'chart-' + record.c" *ngFor="let record of metrics">
+      <app-chart
+        *ngIf="null == selected || record.c == selected"
+        [metricRecord]="record"
+        [expand]="record.c == selected">
+      </app-chart>
+    </div>
+  </div>
+</section>

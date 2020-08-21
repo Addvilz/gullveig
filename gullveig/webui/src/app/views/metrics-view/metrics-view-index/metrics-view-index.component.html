@@ -1,0 +1,10 @@
+<app-no-data *ngIf="!idents || 0===idents.length"></app-no-data>
+<mat-nav-list class="select-node mat-elevation-z12" *ngIf="!!idents && idents.length > 0">
+  <div mat-subheader>Nodes</div>
+  <a *ngFor="let ident of idents" mat-list-item [routerLink]="['/metrics', ident.ident]">
+    <div class="split-header">
+      <div class="left">{{ident.ident}}</div>
+      <div class="right">Seen {{ident.last_seen_at | f_ts_ago}}</div>
+    </div>
+  </a>
+</mat-nav-list>

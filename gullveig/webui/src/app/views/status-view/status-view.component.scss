@@ -1,0 +1,87 @@
+@import "~nord/src/sass/nord";
+
+:host {
+  .mat-accordion {
+    display: block;
+    margin: 35px;
+  }
+
+  .mat-expansion-panel-header-title > .service-status {
+    margin-right: 1rem;
+  }
+
+  .mat-expansion-panel-header-title {
+    display: flex;
+    align-items: center;
+  }
+
+  .node-description {
+    flex: 1;
+    display: flex;
+
+    .left {
+      flex: 1;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+    }
+
+    .right {
+      a {
+        background: rgba(255, 255, 255, 0.11);
+        height: 20px;
+        line-height: 20px;
+      }
+
+      a:not(:last-child) {
+        margin-right: 1rem;
+      }
+    }
+  }
+
+  .status-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.92em;
+
+    th {
+      padding: 0.8em 2em;
+    }
+
+    td {
+      padding: 0.2em 2em;
+      line-height: 24px;
+
+      a {
+        width: 24px;
+        height: 24px;
+        line-height: 24px;
+      }
+    }
+
+    th {
+      background: $nord0;
+      text-align: left;
+    }
+
+    tr:hover {
+      background: $nord0;
+    }
+
+    td.service-status {
+      width: 70px;
+      display: table-cell;
+      border-radius: 0;
+      height: initial;
+      text-align: center;
+    }
+
+    td.actions {
+      overflow: hidden;
+
+      & > * {
+        float: right;
+      }
+    }
+  }
+}

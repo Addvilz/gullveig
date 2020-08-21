@@ -1,0 +1,39 @@
+<mat-progress-bar id="global-loader" mode="indeterminate" *ngIf="loader.isLoading.value"
+                  color="primary"></mat-progress-bar>
+<nav>
+  <mat-toolbar>
+    <a class="logo" mat-button routerLink="/">
+      <img src="/assets/logo.svg" alt="Gullveig">
+    </a>
+    <a *ngIf="isKnownUser" mat-button routerLink="/status" routerLinkActive="active">
+      Status
+    </a>
+    <a *ngIf="isKnownUser" mat-button routerLink="/health" routerLinkActive="active">
+      Health
+    </a>
+    <a *ngIf="isKnownUser" mat-button routerLink="/metrics" routerLinkActive="active">
+      Metrics
+    </a>
+    <a *ngIf="isKnownUser" mat-button routerLink="/meta" routerLinkActive="active">
+      Meta
+    </a>
+    <span class="spacer"></span>
+    <button *ngIf="isKnownUser" mat-icon-button class="update" (click)="emitUpdateView()"
+            title="Update view"
+            [disabled]="loader.isLoading.value">
+      <mat-icon>refresh</mat-icon>
+    </button>
+    <a mat-icon-button class="help" routerLink="/about" routerLinkActive="active">
+      <mat-icon>help_center</mat-icon>
+    </a>
+    <a mat-icon-button class="github" href="https://github.com/addvilz/gullveig" target="_github">
+      <img src="/assets/github.svg" alt="Github">
+    </a>
+    <button *ngIf="isKnownUser" mat-icon-button class="sign-out" (click)="signOut()">
+      <mat-icon>power_settings_new</mat-icon>
+    </button>
+  </mat-toolbar>
+</nav>
+<section class="content">
+  <router-outlet></router-outlet>
+</section>

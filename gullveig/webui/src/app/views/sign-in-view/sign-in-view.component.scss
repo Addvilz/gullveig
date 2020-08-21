@@ -1,0 +1,26 @@
+:host {
+  padding: 10% 35px 35px;
+  display: block;
+
+  section.sign-in {
+    display: flex;
+    justify-content: center;
+
+    form {
+      width: 100%;
+
+      @media screen and(min-width: 800px) {
+        width: 300px;
+      }
+
+      .mat-form-field, .mat-button-base {
+        display: block;
+        width: 100%;
+      }
+
+      .form-submit {
+        margin-top: 25px;
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+root = true
+
+[*]
+end_of_line = lf
+insert_final_newline = true
+
+[{*.ts, *.js, *.scss, *.html, *.vue}]
+indent_style = space
+charset = utf-8
+indent_size = 2
+max_line_length = 120
+continuation_indent_size = 2
+
+[{*.yml, *.yaml}]
+indent_style = space
+charset = utf-8
+indent_size = 2
+
+[*.conf]
+indent_style = space
+charset = utf-8
+indent_size = 4

@@ -1,0 +1,82 @@
+@import "~nord/src/sass/nord";
+@import "~@angular/material/theming";
+
+$dark-primary-text: #efefef;
+$dark-secondary-text: rgba($dark-primary-text, 0.54);
+$dark-disabled-text: rgba($dark-primary-text, 0.38);
+$dark-dividers: rgba($dark-primary-text, 0.12);
+$dark-focused: rgba($dark-primary-text, 0.12);
+
+$theme: (
+  50 : #ecf0f5,
+  100 : #cfd9e6,
+  200 : #afc0d6,
+  300 : #8ea7c5,
+  400 : #7694b8,
+  500 : #5e81ac,
+  600 : #5679a5,
+  700 : #4c6e9b,
+  800 : #426492,
+  900 : #315182,
+  A100 : #ccdfff,
+  A200 : #99c0ff,
+  A400 : #66a0ff,
+  A700 : #4d90ff,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #000000,
+    400 : #000000,
+    500 : #ffffff,
+    600 : #ffffff,
+    700 : #ffffff,
+    800 : #ffffff,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #000000,
+    A700 : #000000,
+  )
+);
+
+$mat-dark-theme-background: (
+  status-bar: black,
+  app-bar: $nord3,
+  background: $nord0,
+  hover: rgba(white, 0.04),
+  card: $nord2,
+  dialog: $nord2,
+  disabled-button: rgba(white, 0.12),
+  raised-button: $nord2,
+  focused-button: $light-focused,
+  selected-button: lighten($nord2, 10),
+  selected-disabled-button: $nord2,
+  disabled-button-toggle: black,
+  unselected-chip: map_get($mat-grey, 100),
+  disabled-list-option: black,
+  tooltip: map_get($mat-grey, 700),
+);
+
+$mat-dark-theme-foreground: (
+  base: white,
+  divider: $light-dividers,
+  dividers: $light-dividers,
+  disabled: $light-disabled-text,
+  disabled-button: rgba(white, 0.3),
+  disabled-text: $light-disabled-text,
+  elevation: rgba(44, 44, 44, 0.2),
+  hint-text: $light-disabled-text,
+  secondary-text: $light-secondary-text,
+  icon: white,
+  icons: white,
+  text: white,
+  slider-min: white,
+  slider-off: rgba(white, 0.3),
+  slider-off-active: rgba(white, 0.3),
+);
+
+$theme-primary: mat-palette($theme);
+$theme-accent: mat-palette($theme);
+$theme-warn: mat-palette($mat-orange);
+$theme-global: mat-dark-theme($theme-primary, $theme-accent, $theme-warn);

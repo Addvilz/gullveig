@@ -1,0 +1,165 @@
+@import '~material-icons/iconfont/material-icons.css';
+@import 'theming';
+
+$font-stack: '\'SF Pro Text\', -apple-system, BlinkMacSystemFont, \'segoe ui\', roboto, oxygen-sans, ubuntu, cantarell, \'helvetica neue\', \'arial\', sans-serif, \'apple color emoji\', \'segoe ui emoji\', \'segoe ui symbol\'';
+
+$custom-typography: mat-typography-config(
+  $font-family: $font-stack,
+  $display-4: mat-typography-level(112px, 112px, 300, $letter-spacing: -0.05em),
+  $display-3: mat-typography-level(56px, 56px, 400, $letter-spacing: -0.02em),
+  $display-2: mat-typography-level(45px, 48px, 400, $letter-spacing: -0.005em),
+  $display-1: mat-typography-level(34px, 40px, 400),
+  $headline: mat-typography-level(24px, 32px, 400),
+  $title: mat-typography-level(20px, 32px, 500),
+  $subheading-2: mat-typography-level(16px, 28px, 400),
+  $subheading-1: mat-typography-level(15px, 24px, 400),
+  $body-2: mat-typography-level(15px, 24px, 500),
+  $body-1: mat-typography-level(15px, 20px, 400),
+  $caption: mat-typography-level(12px, 20px, 400),
+  $button: mat-typography-level(14px, 14px, 500),
+  $input: mat-typography-level(inherit, 1.125, 400)
+);
+
+@include mat-core($custom-typography);
+@include angular-material-theme($theme-global);
+
+body {
+  background: $nord0;
+  color: #efefef;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+.service-status, .health-status {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 1rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  line-height: inherit;
+
+  &.ok {
+    color: $nord0;
+    background: $nord14;
+  }
+
+  &.warning {
+    color: $nord0;
+    background: $nord13;
+  }
+
+  &.critical {
+    color: $nord0;
+    background: $nord11;
+  }
+
+  &.unknown {
+    color: $nord0;
+    background: $nord12;
+  }
+}
+
+.service-status {
+  min-width: 70px;
+}
+
+.health-status {
+  min-width: 80px;
+}
+
+.mat-button.active .mat-button-focus-overlay,
+.mat-stroked-button.active .mat-button-focus-overlay {
+  opacity: 0.04 !important;
+}
+
+.tiny-toggle {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+
+  .mat-button-toggle-appearance-standard .mat-button-toggle-label-content {
+    padding: 0;
+    line-height: initial;
+  }
+
+  .mat-button-toggle.mat-button-toggle-appearance-standard {
+    flex: 1;
+    display: flex;
+
+    .mat-button-toggle-label-content {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 24px;
+    }
+  }
+}
+
+.health-status-toggle {
+  box-sizing: border-box;
+  display: flex;
+  height: 42px;
+
+  .mat-button-toggle-appearance-standard .mat-button-toggle-label-content {
+    line-height: initial;
+  }
+
+  .mat-button-toggle.mat-button-toggle-appearance-standard {
+    flex: 1;
+    display: flex;
+
+    .mat-button-toggle-label-content {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 24px;
+    }
+  }
+}
+
+.mat-list-item.active .mat-list-item-content, .mat-list-option.active .mat-list-item-content{
+  color: $nord6;
+}
+
+a.link {
+  color: $nord6;
+}
+
+.mat-button,
+.mat-icon-button,
+.mat-stroked-button,
+.mat-flat-button,
+.mat-raised-button {
+  border-radius: 0 !important;
+}
+
+.mat-accordion .mat-expansion-panel:last-of-type {
+  border-bottom-right-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+.mat-accordion .mat-expansion-panel:first-of-type {
+  border-top-right-radius: 0 !important;
+  border-top-left-radius: 0 !important;
+}
+
+.mat-expansion-panel, .mat-expansion-panel-header {
+  border-radius: 0 !important;
+}
+
+.mat-button-toggle-standalone.mat-button-toggle-appearance-standard, .mat-button-toggle-group-appearance-standard {
+  border-radius: 0 !important;
+}
+
+.cdk-overlay-pane {
+  margin-top: 64px !important;
+}
+
+.error-alert {
+  background: $nord12;
+  color: $nord0;
+}

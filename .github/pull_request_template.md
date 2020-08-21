@@ -1,0 +1,23 @@
+**IMPORTANT: Please do not create a Pull Request without creating an issue first.**
+
+IMPORTANT: Any change needs to be discussed before proceeding. Failure to do so may result in the rejection of the pull request.
+
+## Proposed Changes
+
+1. ...
+2. ...
+3. ...
+
+## Relevant issues
+
+Closes #...
+Closes #...
+Closes #...
+Related #...
+
+# Contributor grant
+
+By submitting this code contribution, I, the author of this pull request hereby certify that:
+
+- I am the sole author of the source code contributed with this pull request, or have been explicitly granted the right to contribute this source code by the author(s) of the source code; and
+- I hereby dedicate this source code to this project under the terms and conditions of Apache 2.0 license.

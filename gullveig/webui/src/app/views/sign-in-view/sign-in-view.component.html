@@ -1,0 +1,26 @@
+<section class="sign-in">
+  <form [formGroup]="signInForm" (ngSubmit)="onSubmit()">
+    <div>
+      <mat-form-field appearance="standard" >
+        <mat-label>Username</mat-label>
+        <input formControlName="username" matInput type="text" autocomplete="username">
+        <mat-error *ngIf="username.invalid && (username.dirty || username.touched)" class="text-warn">
+          Please, enter your username
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field appearance="standard" >
+        <mat-label>Password</mat-label>
+        <input formControlName="password" matInput type="password" autocomplete="current-password">
+        <mat-error *ngIf="password.invalid && (password.dirty || password.touched)" class="text-warn">
+          <span *ngIf="password.errors.required">Please, enter your password.</span>
+        </mat-error>
+        <mat-hint *ngIf="password.value?.length > 0" align="end">{{password.value?.length}}</mat-hint>
+      </mat-form-field>
+    </div>
+    <div class="form-submit">
+      <button [disabled]="!signInForm.valid || isLoading" type="submit" mat-flat-button>Sign in</button>
+    </div>
+  </form>
+</section>

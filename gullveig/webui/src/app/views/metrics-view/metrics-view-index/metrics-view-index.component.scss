@@ -1,0 +1,22 @@
+@import "~nord/src/sass/nord";
+
+:host {
+  display: flex;
+  justify-content: center;
+  padding: 35px;
+
+  .select-node {
+    min-width: 300px;
+    background: $nord1;
+    flex: 1;
+  }
+
+  .split-header {
+    flex: 1;
+    display: flex;
+
+    .left {
+      flex: 1;
+    }
+  }
+}

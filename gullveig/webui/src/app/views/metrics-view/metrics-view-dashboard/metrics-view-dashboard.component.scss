@@ -1,0 +1,38 @@
+@import "~nord/src/sass/nord";
+
+:host {
+  height: 100%;
+  display: block;
+  position: relative;
+  box-sizing: border-box;
+
+  & > section {
+    box-sizing: border-box;
+    display: flex;
+    height: 100%;
+    position: relative;
+
+    .left {
+      width: 250px;
+      background: $nord1;
+      overflow-y: auto;
+
+      .mat-list-item {
+        height: 26px;
+        color: #cecece;
+      }
+
+      .mat-divider {
+        margin-top: 10px;
+      }
+    }
+
+    .right {
+      padding-left: 35px;
+      padding-right: 35px;
+      flex: 1;
+      height: 100%;
+      overflow-y: auto;
+    }
+  }
+}

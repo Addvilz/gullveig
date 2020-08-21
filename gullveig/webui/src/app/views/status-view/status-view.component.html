@@ -1,0 +1,58 @@
+<app-no-data *ngIf="!status || 0===status.length"></app-no-data>
+<mat-accordion *ngIf="!!status && status.length > 0" multi>
+  <mat-expansion-panel *ngFor="let node of status">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <span [class]="node.health | f_status_class">
+            {{ node.health | f_status_name }}
+        </span>
+        {{ node.ident }}
+      </mat-panel-title>
+      <mat-panel-description>
+        <div class="node-description">
+          <div class="left">
+            <span [title]="node.last_seen_at | date:'yyyy-MM-dd HH:mm:ss'">
+              Seen {{ node.last_seen_at | f_ts_ago }}
+              from {{ node.last_seen_from }}
+            </span>
+          </div>
+          <div class="right">
+            <a mat-flat-button [routerLink]="['/metrics', node.ident]">Metrics</a>
+            <a mat-flat-button [routerLink]="['/meta', node.ident]">Meta</a>
+          </div>
+        </div>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <ng-template matExpansionPanelContent>
+      <table class="status-table">
+        <tr>
+          <th title="Current status">Status</th>
+          <th title="Agent module">Mod</th>
+          <th title="Reporting subject">Subject</th>
+          <th title="Reporting type">Type</th>
+          <th title="Last reported value">Value</th>
+          <th>Last update</th>
+          <th></th>
+        </tr>
+        <tr *ngFor="let item of node.items">
+          <td [class]="item.status | f_status_class">
+              {{ item.status | f_status_name }}
+          </td>
+          <td title="Agent module">{{ item.mod }}</td>
+          <td title="Reporting subject">{{ item.subject }}</td>
+          <td title="Reporting type">{{ item.type }}</td>
+          <td title="Resource remaining" *ngIf="item.remaining !== null">{{ item.remaining | f_percent }}</td>
+          <td *ngIf="item.remaining === null">-</td>
+          <td [title]="item.updated_at| date:'yyyy-MM-dd HH:mm:ss'">
+            {{ item.updated_at | f_ts_ago }}
+          </td>
+          <td class="actions">
+            <a *ngIf="item.is_metric" mat-icon-button [routerLink]="['/metrics', node.ident, item.c]" title="Show statistics">
+              <mat-icon>bar_chart</mat-icon>
+            </a>
+          </td>
+        </tr>
+      </table>
+    </ng-template>
+  </mat-expansion-panel>
+</mat-accordion>

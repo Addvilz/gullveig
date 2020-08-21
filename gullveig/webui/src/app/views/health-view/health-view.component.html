@@ -1,0 +1,71 @@
+<app-no-data *ngIf="!health || 0===health.length"></app-no-data>
+<div *ngIf="!!health && health.length > 0">
+  <div class="health-header">
+    <div class="left">
+      <mat-form-field appearance="standard">
+        <mat-label>Idents</mat-label>
+        <mat-select [formControl]="idents" multiple>
+          <mat-select-trigger>
+            {{idents.value ? idents.value[0] : ''}}
+            <span *ngIf="idents.value?.length > 1" class="example-additional-selection">
+            (+{{idents.value.length - 1}} {{idents.value?.length === 2 ? 'other' : 'others'}})
+          </span>
+          </mat-select-trigger>
+          <mat-option *ngFor="let ident of identList" [value]="ident">{{ident}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="right">
+      <mat-button-toggle-group class="health-status-toggle" #stateFilter="matButtonToggleGroup" multiple>
+        <mat-button-toggle [value]="2">
+          Outage
+        </mat-button-toggle>
+        <mat-button-toggle [value]="1">
+          Incident
+        </mat-button-toggle>
+        <mat-button-toggle [value]="0">
+          Resolved
+        </mat-button-toggle>
+        <mat-button-toggle [value]="3">
+          Unknown
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+  </div>
+
+  <app-no-data *ngIf="filteredHealthRecords().length === 0"></app-no-data>
+
+  <table class="status-table" *ngIf="filteredHealthRecords().length > 0 ">
+    <tr>
+      <th title="Current status">Current</th>
+      <th title="Previous status">Previous</th>
+      <th title="Node ident">Ident</th>
+      <th title="Agent module">Mod</th>
+      <th title="Reporting subject">Subject</th>
+      <th title="Reporting type">Type</th>
+      <th title="Last reported value">Value</th>
+      <th title="Date of the record">Date</th>
+      <th></th>
+    </tr>
+    <tr *ngFor="let report of filteredHealthRecords()">
+      <td [class]="report.status | f_health_class">{{ report.status | f_health_name }}</td>
+      <td title="Previous status">{{ report.before | f_health_name }}</td>
+      <td title="Node ident">{{ report.ident }}</td>
+      <td title="Agent module">{{ report.mod }}</td>
+      <td title="Reporting subject">{{ report.subject }}</td>
+      <td title="Reporting type">{{ report.type }}</td>
+
+      <td title="Resource remaining" *ngIf="report.remaining !== null">{{ report.remaining | f_percent }}</td>
+      <td *ngIf="!report.remaining"></td>
+
+      <td [title]="report.updated_at | date:'yyyy-MM-dd HH:mm:ss'">
+              {{ report.updated_at | f_ts_ago }}
+      </td>
+      <td class="actions">
+        <a mat-icon-button [routerLink]="['/metrics', report.ident, report.c]" *ngIf="report.is_metric">
+          <mat-icon>bar_chart</mat-icon>
+        </a>
+      </td>
+    </tr>
+  </table>
+</div>
