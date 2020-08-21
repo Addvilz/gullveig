@@ -76,7 +76,7 @@ def get_report(config):
                 's': 'swap',
                 't': 'used',
                 'r': swap_percent,
-                'st': get_int_marker_for_percentage(swap_percent, 60, 10),
+                'st': get_int_marker_for_percentage(swap_percent, 60, 10) if swap.total > 0 else 0,  # Sigh...
                 'm': True
             },
             {
