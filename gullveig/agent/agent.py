@@ -355,6 +355,7 @@ def main():
                 'smtp_port': '',
                 'smtp_user': '',
                 'smtp_password': '',
+                'smtp_mode': 'tls'
             }
         }
     )

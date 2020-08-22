@@ -111,6 +111,8 @@ smtp_host = smtp.example.com
 smtp_port = 587
 smtp_user = smtp_user@example.com
 smtp_password = example
+# SMTP mode - plain, tls, starttls. By default - tls.
+; smtp_mode = tls
 ```
 
 ##### 5. Create server data directory

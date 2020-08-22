@@ -142,10 +142,24 @@ class AlertManager:
         message['Subject'] = subject
         message.set_content(text)
 
+        use_tls = False
+        use_starttls = False
+
+        mode = self.config['mail']['smtp_mode']
+
+        if mode == 'tls':
+            use_tls = True
+            use_starttls = False
+        elif mode == 'starttls':
+            use_tls = False
+            use_starttls = True
+
         await aiosmtplib.send(
             message=message,
             hostname=self.config['mail']['smtp_host'],
             port=self.config['mail'].getint('smtp_port'),
             username=self.config['mail']['smtp_user'],
-            password=self.config['mail']['smtp_password']
+            password=self.config['mail']['smtp_password'],
+            use_tls=use_tls,
+            start_tls=use_starttls
         )
