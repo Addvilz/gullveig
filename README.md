@@ -28,7 +28,7 @@ Gullveig setup is designed to be easy to deploy both manually and using configur
 
 Gullveig offers for monitoring using both embedded and external modules.
 
-There are currently 4 embedded modules:
+There are several embedded modules available:
 
 - mod_facter - retrieves and reports host metadata using `facter`, if installed.
 - mod_fs - monitors and reports file system state (mounts, utilization).
@@ -37,6 +37,9 @@ There are currently 4 embedded modules:
 - mod_apt - lists available apt upgrades in meta, emits warning when upgrades are available (requires `python3-apt` to be installed independently)
 
 You can create your own external modules using any programming language. See [how to create modules](./README_MOD.md).
+
+By default, only `mod_facter`, `mod_fs`, `mod_res` and `mod_systemd` modules are enabled. You can enable other modules as needed
+in the configuration file of each agent (`agent.conf`).
 
 ## License
 
