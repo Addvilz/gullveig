@@ -13,7 +13,7 @@ from os import path, sched_getaffinity
 from aiohttp import ClientSession, ClientTimeout, ClientWebSocketResponse, ClientConnectorError, \
     WSServerHandshakeError, WSMsgType
 
-from gullveig.agent.modules import mod_facter, mod_fs, mod_res, mod_systemd
+from gullveig.agent.modules import mod_facter, mod_fs, mod_res, mod_systemd, mod_apt
 from gullveig.agent.shmod import invoke_external_module, create_external_mod
 from gullveig.common.alerting import FailureObserver, AlertManager
 from gullveig.common.configuration import Configuration, ConfigurationError
@@ -40,6 +40,11 @@ EMBEDDED_MODULES = {
         'get_report': mod_systemd.get_report,
         'supports': mod_systemd.supports,
         'key': mod_systemd.key,
+    },
+    'mod_apt': {
+        'get_report': mod_apt.get_report,
+        'supports': mod_apt.supports,
+        'key': mod_apt.key,
     }
 }
 
@@ -338,7 +343,8 @@ def main():
                 'mod_facter': 'True',
                 'mod_fs': 'True',
                 'mod_res': 'True',
-                'mod_systemd': 'True'
+                'mod_systemd': 'True',
+                'mod_apt': 'False'
             },
             'mod_systemd': {},
             'mail': {

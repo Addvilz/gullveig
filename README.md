@@ -34,6 +34,7 @@ There are currently 4 embedded modules:
 - mod_fs - monitors and reports file system state (mounts, utilization).
 - mod_res - monitors and reports on host resource utilization (memory, cpu, swap).
 - mod_systemd - monitors state of systemd services.
+- mod_apt - lists available apt upgrades in meta, emits warning when upgrades are available (requires `python3-apt` to be installed independently)
 
 You can create your own external modules using any programming language. See [how to create modules](./README_MOD.md).
 

@@ -7,7 +7,7 @@ with open('README.md') as f:
 
 setup(
     name='gullveig',
-    version='0.1.2',
+    version='0.1.3',
     description='Distributed systems and service monitoring',
     long_description=readme,
     long_description_content_type='text/markdown',

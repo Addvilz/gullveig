@@ -60,7 +60,10 @@ class AnalyticsManager:
                     request.status.append(record)
                     current_status = await self.dbi.get_current_status(source, record.subject, record.type)
 
-                    if current_status is not None and current_status != record.state:
+                    if current_status is None:
+                        current_status = 3
+
+                    if current_status != record.state:
                         request.health.append(HealthTransitionRecord(source, record, current_status))
                         self.logger.info(
                             'Service health changed from %d to %d for %s',
