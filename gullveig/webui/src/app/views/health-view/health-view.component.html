@@ -45,7 +45,7 @@
       <th title="Reporting type">Type</th>
       <th title="Last reported value">Value</th>
       <th title="Date of the record">Date</th>
-      <th></th>
+      <th>&nbsp;</th>
     </tr>
     <tr *ngFor="let report of filteredHealthRecords()">
       <td [class]="report.status | f_health_class">{{ report.status | f_health_name }}</td>
@@ -56,7 +56,7 @@
       <td title="Reporting type">{{ report.type }}</td>
 
       <td title="Last reported value" *ngIf="report.remaining !== null">{{ report.remaining | f_percent }}</td>
-      <td *ngIf="!report.remaining"></td>
+      <td *ngIf="null === report.remaining"></td>
 
       <td [title]="report.updated_at | date:'yyyy-MM-dd HH:mm:ss'">
               {{ report.updated_at | f_ts_ago }}

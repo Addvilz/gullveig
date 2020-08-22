@@ -73,6 +73,8 @@ cd /etc/gullveig/
 openssl req -nodes -x509 -newkey rsa:4096 -keyout server_key.pem -out server_cert.pem -days 3650
 ```
 
+**IMPORTANT:** make sure certificate and the private key is readable by `gullveig-server` user - it will fail to start otherwise. 
+
 Updating the certificate in future will require you to generate a new certificate and key, and have all agents paired to the server again. This process can be automated to ensure minimal service disruption - see the section about how to pair agents and servers bellow.
 
 ##### 4. Create server configuration file
@@ -115,8 +117,8 @@ smtp_password = example
 
 ```shell script
 mkdir -p /var/lib/gullveig-server/
-chown gullveig-server:gullveig-server /var/lib/gullveig
-chmod 0750 /var/lib/gullveig
+chown gullveig-server:gullveig-server /var/lib/gullveig-server/
+chmod 0750 /var/lib/gullveig-server/
 ```
 
 ##### 6. Optional - create systemd service
