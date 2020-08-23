@@ -3,10 +3,15 @@
   <mat-expansion-panel *ngFor="let node of status">
     <mat-expansion-panel-header>
       <mat-panel-title>
-        <span [class]="node.health | f_status_class">
+        <div [class]="node.health | f_status_class">
             {{ node.health | f_status_name }}
-        </span>
-        {{ node.ident }}
+        </div>
+        <div class="version-compat-warn"
+             *ngIf="node.agent_version !== node.server_version"
+             title="Agent version does not match server version">
+          <mat-icon color="warn">warning</mat-icon>
+        </div>
+        <div class="node-title">{{node.ident}}</div>
       </mat-panel-title>
       <mat-panel-description>
         <div class="node-description">
@@ -24,6 +29,10 @@
       </mat-panel-description>
     </mat-expansion-panel-header>
     <ng-template matExpansionPanelContent>
+      <div class="version-compat-info" *ngIf="node.agent_version !== node.server_version">
+        Reported agent version - {{node.agent_version}}, does not match server version - {{node.server_version}}.
+        This is not optimal and could result in reporting errors.
+      </div>
       <table class="status-table">
         <tr>
           <th title="Current status">Status</th>

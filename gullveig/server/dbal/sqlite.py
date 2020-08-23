@@ -8,6 +8,7 @@ from typing import Optional, List
 import aiosqlite
 from aiosqlite import Connection, Cursor
 
+from gullveig import GULLVEIG_VERSION
 from gullveig.server import AnalyticsMetaRecord, AnalyticsMetricRecord, AnalyticsStatusRecord, HealthTransitionRecord
 from gullveig.server.date import ts_current_second_start, ts_current_minute_start, ts_current_hour_start, \
     ts_current_day_start, ts_last_monday_start, ts_current_month_start, ts_current_year_start
@@ -67,16 +68,20 @@ class SQLite3Scope:
         conn = await self.pool.get_or_create()
         await conn.commit()
 
-    async def update_last_seen(self, remote: str, ident: str, time: int):
+    async def update_last_seen(self, remote: str, version: str, ident: str, time: int):
         cursor = await self.pool.cursor()
         await cursor.execute(
-            'INSERT INTO `idents` VALUES (:ident, :last_seen_at, :last_seen_from) '
+            'INSERT INTO `idents` '
+            ' (`ident`, `version`, `last_seen_at`, `last_seen_from`)'
+            'VALUES (:ident, :version, :last_seen_at, :last_seen_from) '
             'ON CONFLICT (`ident`) '
             'DO UPDATE SET '
+            '   `version` = :version, '
             '   `last_seen_at` = :last_seen_at, '
             '   `last_seen_from` = :last_seen_from ',
             {
                 'ident': ident,
+                'version': version,
                 'last_seen_at': time,
                 'last_seen_from': remote
             }
@@ -266,6 +271,13 @@ class SQLite3Scope:
         await cursor.close()
         return records
 
+    async def store_server_version(self):
+        cursor = await self.pool.cursor()
+        await cursor.execute('UPDATE `gullveig` SET `version` = :version WHERE true', {
+            'version': GULLVEIG_VERSION
+        })
+        await cursor.close()
+
 
 class SQLite3DBAL:
     def __init__(self, dsn):
@@ -276,6 +288,7 @@ class SQLite3DBAL:
         conn = await self.pool.get_or_create()
         cursor = await conn.cursor()
         await self.schema.migrate(cursor)
+        await self.store_server_version()
         await cursor.close()
         await conn.commit()
 
@@ -297,11 +310,16 @@ class SQLite3DBAL:
             % sqlite3.sqlite_version
         )
 
+    async def store_server_version(self):
+        async with self.scope() as scope:
+            await scope.store_server_version()
+
 
 class SQLite3Schema:
     def __init__(self):
         self.migrations = {
             1: self.migrate_v1,
+            2: self.migrate_v2,
         }
 
     async def migrate(self, cursor: Cursor):
@@ -429,3 +447,8 @@ class SQLite3Schema:
             await cursor.execute('CREATE INDEX `idx_{0}_tims` ON `{0}` (`time`,`ident`,`mod`, `subject`)'.format(table))
             await cursor.execute(
                 'CREATE INDEX `idx_{0}_timsm` ON `{0}` (`time`,`ident`,`mod`, `subject`, `metric`)'.format(table))
+
+    async def migrate_v2(self, cursor: Cursor):
+        await cursor.execute('ALTER TABLE `idents` ADD `version` VARCHAR(50) default \'unknown\' NOT NULL')
+        await cursor.execute('ALTER TABLE `gullveig` ADD `version` VARCHAR(50) default \'unknown\' NOT NULL')
+        await cursor.execute('UPDATE `gullveig` SET `db_version` = 2 WHERE true')

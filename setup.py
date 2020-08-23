@@ -2,12 +2,14 @@
 
 from setuptools import setup, find_packages
 
+from gullveig import GULLVEIG_VERSION
+
 with open('README.md') as f:
     readme = f.read()
 
 setup(
     name='gullveig',
-    version='0.1.4',
+    version=GULLVEIG_VERSION,
     description='Distributed systems and service monitoring',
     long_description=readme,
     long_description_content_type='text/markdown',

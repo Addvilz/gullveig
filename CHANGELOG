@@ -1,3 +1,9 @@
+* Sun Aug 23 2020 Matiss Treinis <matiss@hub256.com> - 0.1.5
+- Allow configuration override files
+- Report server, agent and web versions
+- Warn about agent version incompatibility in Web
+- Serve web files from memory only
+
 * Sat Aug 22 2020 Matiss Treinis <matiss@hub256.com> - 0.1.4
 - Explicitly define TLS/STARTTLS for alerting
 

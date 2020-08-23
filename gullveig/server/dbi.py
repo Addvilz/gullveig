@@ -36,9 +36,9 @@ class DBI:
             await scope.write_status(status)
             await scope.write_health(health)
 
-    async def update_ident_seen(self, remote: str, ident: str, time: int):
+    async def update_ident_seen(self, remote: str, version: str, ident: str, time: int):
         async with self.db.scope() as scope:
-            await scope.update_last_seen(remote, ident, time)
+            await scope.update_last_seen(remote, version, ident, time)
 
     async def cleanup(self):
         retention_sec = {

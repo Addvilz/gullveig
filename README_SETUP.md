@@ -153,24 +153,11 @@ Finally, execute `systemctl enable gullveig-server` to enable server to start du
 
 Gullveig ships with embedded web UI for you to be able to monitor service state, access node metadata etc. Deploying the web UI is recommended, but optional - web UI is not needed to receive service alerts from the reporting server.
 
-**IMPORTANT:** web UI must be deployed on the same host as reporting server. This is because web UI backend effectively reads
-data from the reporting server database directly. Reporting server has no facilities to access the data.
+**IMPORTANT:** web UI *must be deployed on the same host as reporting server*. This is because web UI backend effectively reads
+data from the reporting server database directly. Reporting server has no facilities to access the data. We should also reuse the same user and
+group to run the web UI service.
 
-##### 1. Create a system user for web server daemon
-
-```shell script
-useradd -r gullveig-web
-```
-
-##### 2. Create configuration directory
-
-You can skip this step if agent or server is already installed - the directory is the same for all Gullveig components.
-
-```shell script
-mkdir -p /etc/gullveig/
-```
-
-##### 3. Generate web server certificate and key
+##### 1. Generate web server certificate and key
 
 Gullveig web UI server serves all content using HTTPS. Having a certificate is mandatory and there is no way to disable TLS for the web UI server.
 
@@ -181,7 +168,7 @@ To obtain a certificate for the web UI server you can either:
 
 **IMPORTANT** - do not reuse the reporting server certificate for the web UI server.
 
-##### 4. Create web server configuration file
+##### 2. Create web server configuration file
 
 Create a file `/etc/gullveig/web.conf` and edit it with contents shown bellow. You can modify the options as needed.
 
@@ -210,7 +197,7 @@ secret = CHANGEME
 data_dir = /var/lib/gullveig-server/
 ```
 
-##### 5. Optional - create systemd service
+##### 3. Optional - create systemd service
 
 1. Create systemd unit file at `/etc/systemd/system/gullveig-web.service`.
 2. Change the file permissions `chmod 0644 /etc/systemd/system/gullveig-web.service`.
@@ -227,8 +214,8 @@ ExecStart=gullveig-web --conf /etc/gullveig/web.conf
 Environment=PYTHONUNBUFFERED=1
 Restart=on-failure
 
-User=gullveig-web
-Group=gullveig-web
+User=gullveig-server
+Group=gullveig-server
 
 [Install]
 WantedBy=default.target
@@ -299,6 +286,7 @@ mod_facter = true
 mod_fs = true
 mod_res = true
 mod_systemd = true
+mod_apt = false
 ; external_mod = /home/user/example-script.sh arg1 arg2 arg3
 
 [mod_systemd]
@@ -352,3 +340,13 @@ WantedBy=default.target
 ```
 
 Finally, execute `systemctl enable gullveig-agent` to enable agent start during boot time and `systemctl start gullveig-agent` to start the agent.
+
+## Configuration files, compartmentalization and overrides
+
+Whenever a configuration path is provided to any of the Gullveig CLI interfaces, Gullveig will automatically look for related ".d" directory. If exists, all `.conf` files from this directory will be loaded, and their contents will take precedence over the initially provided configuration file. This feature is useful for two things - to keep the main configuration files from becoming too crowded, and to install local overrides for global defaults.
+
+The path of the ".d" directory is directly related to the configuration file path given - `agent.conf` will result in `agent.conf.d/`, `server.conf` will result in `server.conf.d` and so forth. 
+
+For example, given a configuration file `/etc/gullveig/agent.conf`, Gullveig will also look for a directory `/etc/gullveig/agent.conf.d` - all `.conf` files in this directory will be loaded and their values will replace the ones initially defined in `/etc/gullveig/agent.conf`.
+
+The files in ".d" directory will be loaded by priority, for example, `5-local.conf` would be loaded before `10-local.conf`. Configuration files without any priority prefix will be loaded in arbitrary order.

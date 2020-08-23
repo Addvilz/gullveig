@@ -11,7 +11,7 @@ class AnalyticsManager:
         self.logger = logger
         self.dbi = dbi
 
-    async def handle_agent_report(self, remote: str, ident: str, payload: dict):
+    async def handle_agent_report(self, remote: str, version: str, ident: str, payload: dict):
         if 'meta' not in payload:
             raise RuntimeError('Payload has no metadata - invalid report')
 
@@ -25,7 +25,7 @@ class AnalyticsManager:
 
         time = meta['time']
 
-        await self.dbi.update_ident_seen(remote, ident, time)
+        await self.dbi.update_ident_seen(remote, version, ident, time)
 
         requests: List[UpdateRequest] = []
 

@@ -14,6 +14,7 @@ from aiohttp.web_middlewares import middleware
 from aiohttp.web_response import Response
 from jwt import DecodeError, InvalidTokenError
 
+from gullveig import GULLVEIG_VERSION
 from gullveig.common.configuration import Configuration
 from gullveig.web.dbi import DBI
 
@@ -105,8 +106,19 @@ async def list_idents(_):
     return json_response(idents)
 
 
+@api.get('/versions/')
+async def list_versions(_):
+    server_version = await dbi.get_server_version()
+    return json_response({
+        'server': server_version,
+        'web': GULLVEIG_VERSION
+    })
+
+
 @api.get('/status/')
 async def list_status(_):
+    server_version = await dbi.get_server_version()
+
     status = await dbi.list_status()
     status_list = []
 
@@ -119,6 +131,8 @@ async def list_status(_):
         if record_c is None:
             status_list.append({
                 'ident': it['ident'],
+                'agent_version': it['version'],
+                'server_version': server_version,
                 'last_seen_at': it['last_seen_at'],
                 'last_seen_from': it['last_seen_from'],
                 'health': 0,
@@ -127,6 +141,7 @@ async def list_status(_):
             record_c = status_list[-1]
 
         del it['ident']
+        del it['version']
         del it['last_seen_at']
         del it['last_seen_from']
 

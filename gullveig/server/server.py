@@ -14,6 +14,7 @@ from aiohttp.hdrs import UPGRADE
 from aiohttp.web import Application, Request, Response
 from aiohttp.web_runner import AppRunner, TCPSite
 
+from gullveig import GULLVEIG_VERSION
 from gullveig.common.alerting import AlertManager
 from gullveig.common.configuration import Configuration, ConfigurationError
 from gullveig.server import AnalyticsSource, AnalyticsStatusRecord, HealthTransitionRecord
@@ -25,8 +26,8 @@ LOGGER = logging.getLogger('gullveig-server')
 CONTEXT = {}
 
 
-async def handle_payload(remote: str, ident: str, payload: dict):
-    await CONTEXT['analytics'].handle_agent_report(remote, ident, payload)
+async def handle_payload(remote: str, version: str, ident: str, payload: dict):
+    await CONTEXT['analytics'].handle_agent_report(remote, version, ident, payload)
 
 
 async def ws_handler(request: Request):
@@ -52,6 +53,11 @@ async def ws_handler(request: Request):
         return Response(status=400)
 
     remote_ident = headers['x-ident']
+
+    remote_version = '~0.1.4'
+    if 'x-agent-version' in headers:
+        remote_version = headers['x-agent-version']
+
     socket_response = web.WebSocketResponse(autoping=False)
 
     try:
@@ -60,7 +66,7 @@ async def ws_handler(request: Request):
         LOGGER.warning('Agent connection failure from %s, ident %s, %s', remote, remote_ident, e)
         raise e
 
-    LOGGER.info('Agent connected from %s, ident %s', remote, remote_ident)
+    LOGGER.info('Agent connected from %s, ident %s, version %s', remote, remote_ident, remote_version)
 
     async for message in socket_response:
         message: WSMessage
@@ -72,7 +78,7 @@ async def ws_handler(request: Request):
 
             try:
                 payload = json.loads(message.data)
-                await handle_payload(remote, remote_ident, payload)
+                await handle_payload(remote, remote_version, remote_ident, payload)
             except JSONDecodeError as e:
                 LOGGER.exception('Failed to decode payload from %s, ident %s', remote, remote_ident, e)
             except BaseException as e:
@@ -267,8 +273,6 @@ def start(config: Configuration):
 
 
 def main():
-    LOGGER.info('Gullveig reporting server starting')
-
     parser = argparse.ArgumentParser(description='Gullveig reporting server')
     parser.add_argument(
         '--config',
@@ -276,7 +280,19 @@ def main():
         default='/etc/gullveig/server.conf'
     )
 
+    parser.add_argument(
+        '-v', '--version',
+        help='Print version and exit',
+        action='store_true'
+    )
+
     args = parser.parse_args()
+
+    if args.version:
+        print(GULLVEIG_VERSION)
+        exit(0)
+
+    LOGGER.info('Gullveig reporting server starting')
 
     config = Configuration(
         args.config, {

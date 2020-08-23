@@ -37,6 +37,7 @@ class DBI:
         cursor = await self.db.execute(
             'SELECT '
             '   `ident`,'
+            '   `version`,'
             '   `last_seen_at`,'
             '   `last_seen_from`'
             ' FROM `idents`'
@@ -46,10 +47,17 @@ class DBI:
         await cursor.close()
         return data
 
+    async def get_server_version(self) -> Iterable:
+        cursor = await self.db.execute('SELECT `version` FROM `gullveig` LIMIT 1')
+        data = await cursor.fetchone()
+        await cursor.close()
+        return data['version']
+
     async def list_status(self) -> Iterable:
         cursor = await self.db.execute(
             'SELECT '
             '   `status`.`ident`, '
+            '   `idents`.`version`, '
             '   `mod`, '
             '   `subject`, '
             '   `type`, '

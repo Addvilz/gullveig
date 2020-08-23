@@ -2,6 +2,8 @@ import logging
 import sys
 from os import environ
 
+GULLVEIG_VERSION = '0.1.5'
+
 
 def bootstrap_default_logger(logger: logging.Logger):
     is_debug = environ.get('GULLVEIG_DEBUG') is not None
@@ -24,3 +26,11 @@ def bootstrap_default_logger(logger: logging.Logger):
 
     if is_debug:
         logger.debug('Debug logging is enabled')
+
+
+def _configure_default_logger():
+    logger = logging.getLogger('gullveig')
+    bootstrap_default_logger(logger)
+
+
+_configure_default_logger()

@@ -13,6 +13,7 @@ from os import path, sched_getaffinity
 from aiohttp import ClientSession, ClientTimeout, ClientWebSocketResponse, ClientConnectorError, \
     WSServerHandshakeError, WSMsgType
 
+from gullveig import GULLVEIG_VERSION
 from gullveig.agent.modules import mod_facter, mod_fs, mod_res, mod_systemd, mod_apt
 from gullveig.agent.shmod import invoke_external_module, create_external_mod
 from gullveig.common.alerting import FailureObserver, AlertManager
@@ -181,7 +182,8 @@ async def handle_session(session: ClientSession, pool: Executor, on_connected):
         'ssl_context': CONTEXT['ssl_context'],
         'headers': {
             'x-client-key': CONTEXT['client_key'],
-            'x-ident': CONTEXT['config']['agent']['ident']
+            'x-ident': CONTEXT['config']['agent']['ident'],
+            'x-agent-version': GULLVEIG_VERSION
         },
         'autoping': False
     }
@@ -314,8 +316,6 @@ def start(config):
 
 
 def main():
-    LOGGER.info('Gullveig reporting agent starting')
-
     parser = argparse.ArgumentParser(description='Gullveig reporting agent')
     parser.add_argument(
         '--config',
@@ -323,7 +323,19 @@ def main():
         default='/etc/gullveig/agent.conf'
     )
 
+    parser.add_argument(
+        '-v', '--version',
+        help='Print version and exit',
+        action='store_true'
+    )
+
     args = parser.parse_args()
+
+    if args.version:
+        print(GULLVEIG_VERSION)
+        exit(0)
+
+    LOGGER.info('Gullveig reporting agent starting')
 
     # By default, use half of the CPU cores available, minimum of 1, honoring affinity
     max_workers_default = int(max(len(sched_getaffinity(0)) / 2, 1))

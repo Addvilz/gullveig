@@ -1,5 +1,27 @@
-import os
+import logging
 from configparser import ConfigParser
+from os import path, listdir
+
+LOGGER = logging.getLogger('gullveig')
+
+
+def priority_sort_files(k: str):
+    first = 0
+    second = k
+
+    if '-' not in k:
+        return first, second
+
+    parts = k.split('-', 2)
+
+    # noinspection PyBroadException
+    try:
+        first = int(parts[0])
+        second = parts[1]
+    except BaseException:
+        pass
+
+    return first, second
 
 
 class ConfigurationError(RuntimeError):
@@ -9,26 +31,45 @@ class ConfigurationError(RuntimeError):
 
 class Configuration(ConfigParser):
     def __init__(self, file_path: str, defaults: dict, required: dict = {}) -> None:
-        self.__file_path = os.path.realpath(file_path)
-        self.__dirname = os.path.dirname(self.__file_path)
+        self.__file_path = path.realpath(file_path)
+        self.__dirname = path.dirname(self.__file_path)
         self.__defaults = defaults
         self.__required = required
         super().__init__()
 
     def is_file_path_valid(self):
-        return os.path.exists(self.__file_path) and os.path.isfile(self.__file_path)
+        return path.exists(self.__file_path) and path.isfile(self.__file_path)
 
-    def resolve_config_path(self, path):
-        if os.path.isabs(path):
-            return path
+    def resolve_config_path(self, to_resolve):
+        if path.isabs(to_resolve):
+            return to_resolve
 
-        return os.path.abspath(os.path.join(
+        return path.abspath(path.join(
             self.__dirname,
-            path
+            to_resolve
         ))
 
     def initialize(self):
-        self.read(self.__file_path, encoding='utf-8')
+        files_to_read = [
+            self.__file_path
+        ]
+
+        # Scan for additional configuration files to read
+        d_directory = '%s.d/' % self.__file_path
+
+        if path.isdir(d_directory):
+            d_files = sorted(listdir(d_directory), key=priority_sort_files)
+            print(d_files)
+
+            for d_file in d_files:
+                if d_file[-5:] != '.conf':
+                    continue
+
+                files_to_read.append(path.join(d_directory, d_file))
+
+        LOGGER.debug('Loading configuration files, in order: %s', ', '.join(files_to_read))
+
+        self.read(files_to_read, encoding='utf-8')
 
         # Load defaults. Slightly different than DEFAULT behavior
         for section, section_values in self.__defaults.items():

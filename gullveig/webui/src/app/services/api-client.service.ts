@@ -16,6 +16,7 @@ interface AuthResponse {
 
 export interface IdentListItem {
   ident: string;
+  version: string;
   last_seen_at: number;
   last_seen_from: string;
 }
@@ -35,6 +36,8 @@ interface StatusResponseStatus {
 
 interface StatusResponseItem {
   ident: string;
+  agent_version: string;
+  server_version: string;
   last_seen_at: number;
   last_seen_from: string;
   health: number;
@@ -93,6 +96,10 @@ export interface HealthResponseItem {
 
 export declare type HealthResponse = Array<HealthResponseItem>;
 
+export interface VersionsResponse {
+  server: string;
+  web: string;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -128,6 +135,10 @@ export class ApiClientService {
     return this.post<AuthResponse>('/sign-in/', credentials);
   }
 
+  fetchVersions(): Observable<VersionsResponse> {
+    return this.get<VersionsResponse>('/versions/');
+  }
+
   fetchStatus(): Observable<StatusResponse> {
     return this.get<StatusResponse>('/status/');
   }
@@ -137,7 +148,7 @@ export class ApiClientService {
   }
 
   fetchIdents(): Observable<IdentListResponse> {
-    return this.get<StatusResponse>('/ident/');
+    return this.get<IdentListResponse>('/ident/');
   }
 
   fetchMetrics(ident: string, period: string): Observable<MetricsResponse> {
