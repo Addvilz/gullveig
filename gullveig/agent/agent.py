@@ -359,6 +359,9 @@ def main():
                 'mod_apt': 'False'
             },
             'mod_systemd': {},
+            'mod_fs': {
+                'ignore_ro': 'True'
+            },
             'mail': {
                 'enabled': 'False',
                 'smtp_from': '',

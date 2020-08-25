@@ -59,7 +59,6 @@ class Configuration(ConfigParser):
 
         if path.isdir(d_directory):
             d_files = sorted(listdir(d_directory), key=priority_sort_files)
-            print(d_files)
 
             for d_file in d_files:
                 if d_file[-5:] != '.conf':

@@ -293,6 +293,10 @@ mod_apt = false
 # mod_systemd service monitoring configuration - [service name] = [active|inactive]
 ;dnsmasq = active
 ;nginx = active
+
+[mod_fs]
+# Should we ignore read-only file systems? Default: true
+;ignore_ro = true
 ```
 
 ##### 5. Create agent data directory
