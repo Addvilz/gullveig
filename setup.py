@@ -28,6 +28,7 @@ setup(
         'aiosqlite>=0.14.0',
         'aiosmtplib>=1.1.2',
         'pyjwt>=1.7.1',
+        'pyyaml>=5.1.1'
     ],
     entry_points={
         'console_scripts': [

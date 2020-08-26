@@ -24,3 +24,10 @@ def get_resource_remaining_percent(used, total):
         return 0
 
     return 100 - ((used / total) * 100)
+
+
+def get_resource_threshold_exceeded(threshold, used):
+    if used is None:
+        return 0
+
+    return (used / threshold) * 100
