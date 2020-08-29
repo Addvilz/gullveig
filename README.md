@@ -1,6 +1,6 @@
 # Gullveig
 
-![Gullveig](./docs/website/static/img/gullveig.png)
+[![Gullveig](./docs/website/static/img/gullveig.png)](https://gullveig.hub256.com/docs/webui)
 
 Gullveig is a free, open-source, light-weight infrastructure and service monitoring platform. Gullveig offers
 monitoring, alerting, and insights services for servers, services and applications.
