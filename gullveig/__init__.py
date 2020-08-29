@@ -2,7 +2,7 @@ import logging
 import sys
 from os import environ
 
-GULLVEIG_VERSION = '0.1.6'
+GULLVEIG_VERSION = '0.1.7'
 
 
 def bootstrap_default_logger(logger: logging.Logger):
@@ -19,8 +19,10 @@ def bootstrap_default_logger(logger: logging.Logger):
 
     stdout = logging.StreamHandler()
     stdout.setLevel(log_level)
-    stdout.setStream(sys.stdout)
     stdout.setFormatter(stdout_fmt)
+
+    if hasattr(stdout, 'setStream'):
+        stdout.setStream(sys.stdout)
 
     logger.addHandler(stdout)
 

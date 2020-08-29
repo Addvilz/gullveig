@@ -1,6 +1,7 @@
-# Gullveig
-
-![Gullveig](./docs/website/static/img/gullveig.png)
+---
+title: About Gullveig
+sidebar_label: Overview
+---
 
 Gullveig is a free, open-source, light-weight infrastructure and service monitoring platform. Gullveig offers
 monitoring, alerting, and insights services for servers, services and applications.
@@ -21,8 +22,10 @@ using nearly any platform or programming language.
 - Wide operating system support (written in Python 3)
 - Does not depend on third party software for basic operation
 
-For more information, visit [gullveig.hub256.com](https://gullveig.hub256.com).
+
+![Gullveig](/img/gullveig.png)
 
 ## License
 
-Licensed under terms and conditions of Apache 2.0 license.
+Gullveig is licensed under Apache 2.0 software license.
+

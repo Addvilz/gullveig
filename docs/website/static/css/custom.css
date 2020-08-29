@@ -1,0 +1,270 @@
+/**
+    $nord0: #2E3440;
+    $nord1: #3B4252;
+    $nord2: #434C5E;
+    $nord3: #4C566A;
+    $nord4: #D8DEE9;
+    $nord5: #E5E9F0;
+    $nord6: #ECEFF4;
+    $nord10: #5E81AC;
+    $nord11: #BF616A;
+    $nord12: #D08770;
+    $nord13: #EBCB8B;
+    $nord14: #A3BE8C;
+    $nord15: #B48EAD;
+*/
+
+body {
+    background: #2E3440;
+    font: 400 15px/20px SF Pro Text, -apple-system, BlinkMacSystemFont, segoe ui, roboto, oxygen-sans, ubuntu, cantarell, helvetica neue, arial, sans-serif, apple color emoji, segoe ui emoji, segoe ui symbol;
+    letter-spacing: normal;
+    color: #efefef;
+}
+
+* {
+    /*noinspection CssUnknownProperty*/
+    scrollbar-color: #596780 #252831;
+}
+
+*::-webkit-scrollbar {
+    background-color: #252831;
+}
+
+*::-webkit-scrollbar-track {
+    background-color: #252831;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: #596780;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'SF Pro Display', 'open sans', -apple-system, BlinkMacSystemFont, 'segoe ui', roboto, oxygen-sans, ubuntu, cantarell, 'helvetica neue', 'arial', sans-serif, 'apple color emoji', 'segoe ui emoji', 'segoe ui symbol';
+}
+
+div.post a {
+    color: #E5E9F0;
+    text-decoration: underline;
+}
+
+.fixedHeaderContainer header img {
+    height: 60%;
+}
+
+.fixedHeaderContainer header .headerTitleWithLogo {
+    display: none;
+}
+
+.toc .toggleNav .navGroup .navGroupCategoryTitle {
+    color: #e2e2e2;
+}
+
+.toc .toggleNav ul li a {
+    color: #e2e2e2;
+}
+
+.fixedHeaderContainer {
+    background: #4C566A;
+    box-shadow: 0 2px 1px -1px rgba(39, 37, 33, .4), 0 1px 1px 0 rgba(39, 37, 33, .28), 0 1px 3px 0 rgba(39, 37, 33, .24);
+}
+
+.navigationSlider .slidingNav ul li > a:focus,
+.navigationSlider .slidingNav ul li > a:hover,
+.navigationSlider .slidingNav ul li.siteNavItemActive > a,
+.navigationSlider .slidingNav ul li.siteNavGroupActive > a {
+    background-color: #3B4252;
+}
+
+.docsNavContainer, .docsNavContainer .toc .navBreadcrumb {
+    color: #e2e2e2;
+}
+
+.navBreadcrumb a, .navBreadcrumb span {
+    color: #e2e2e2;
+}
+
+.line1, .line2, .line3 {
+    background-color: #e2e2e2;
+}
+
+.onPageNav a {
+    color: #e2e2e2;
+}
+
+.tocActive .onPageNav {
+    background: #3B4252;
+}
+
+.nav-footer {
+    background: #1a1a1a;
+}
+
+button.button {
+    background: transparent;
+    cursor: pointer;
+}
+
+.button {
+    font-weight: 500;
+}
+
+.button:hover {
+    background: #4f66d5;
+    border-color: #4f66d5;
+    transition: background 0.3s, color 0.3s, border-color 0.3s;
+}
+
+h1 {
+    font-weight: 300;
+}
+
+h2 {
+    font-weight: 400;
+}
+
+h3 {
+    font-weight: 500;
+}
+
+h4, h5, h6 {
+    font-weight: 600;
+}
+
+h1 {
+    font-size: 2.4em;
+    line-height: 1.2;
+}
+
+h2 {
+    font-size: 1.8em;
+    line-height: 1.2;
+}
+
+h3 {
+    font-size: 1.5em;
+    line-height: 1.2;
+}
+
+h4 {
+    font-size: 1.2em;
+    line-height: 1.2;
+}
+
+h5 {
+    font-size: 1.1em;
+    line-height: 1.2;
+}
+
+h6 {
+    font-size: 1.0em;
+    line-height: 1.2;
+}
+
+.hljs {
+    background: transparent;
+
+}
+
+.hljs-comment {
+    color: #5E81AC;
+}
+
+.hljs-section {
+    color: #A3BE8C;
+}
+
+.hljs-attr {
+    color: #D08770;
+}
+
+code, pre {
+    font-family: 'SF Mono', 'source code pro', consolas, 'courier new', courier, monospace;
+}
+
+code {
+    color: #A3BE8C;
+    padding: 0;
+    background: transparent;
+    font-size: inherit;
+    user-select: all;
+}
+
+pre {
+    border: 1px solid #4C566A;
+    overflow: auto;
+    margin-bottom: 1rem;
+    padding: 0;
+}
+
+pre code {
+    display: block;
+    font-size: 15px;
+    user-select: auto;
+    padding: 1rem 1.5rem;
+}
+
+.docsContainer {
+    padding-bottom: 200px;
+}
+
+p.note-important {
+    display: block;
+    border-left: 8px solid #803703;
+    background: #aa4903;
+    padding: 15px 30px 15px 15px;
+}
+
+p.note-important > strong:first-child {
+    display: block;
+    color: #e2e2e2;
+    margin-bottom: .28571rem;
+}
+
+p.note-important a {
+    text-decoration: underline;
+}
+
+blockquote {
+    color: inherit !important;
+    border-left-color: #23417b;
+    background: #4e6ca5;
+}
+
+article > div > span > h2:first-child {
+    margin-top: 0.5em;
+}
+
+table tr:nth-child(2n) {
+    background-color: #2E3440;
+}
+
+table thead tr {
+    background-color: #323845;
+}
+
+table th, table td {
+    border-color: #3B4252;
+}
+
+hr {
+    border: none;
+    background: #4C566A;
+    height: 1px;
+}
+
+@media only screen and (max-width: 1023px) {
+    .docsContainer .wrapper .post .postHeader::before,
+    .docsContainer .wrapper .post .postHeaderTitle::before {
+        height: 210px;
+        margin-top: -200px;
+    }
+
+    .docsNavContainer, .docsNavContainer .toc .navBreadcrumb {
+        border-bottom: 0;
+        background: #3B4252;
+    }
+
+    .navigationSlider .slidingNav ul {
+        background: #3B4252;
+    }
+}

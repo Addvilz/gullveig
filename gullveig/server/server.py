@@ -106,7 +106,7 @@ async def server_worker(app, config, ssl_context):
         ssl_context=ssl_context
     )
 
-    loop = asyncio.get_running_loop()
+    loop = asyncio.get_event_loop()
     loop.create_task(database_cleanup_worker())
     loop.create_task(alerting_worker())
     loop.create_task(service_monitoring_worker())
@@ -162,14 +162,14 @@ async def service_monitoring_worker():
     await asyncio.sleep(600)
     LOGGER.debug('Service monitoring worker grace period done')
 
-    now = int(datetime.now().timestamp() * 1000)
-    max_age = int(now - (CONTEXT['service_timeout'] * 1000))
-
     while True:
         try:
             LOGGER.debug('Monitoring for absent services start')
 
             records = await CONTEXT['dbi'].list_all_status_records()
+            now = int(datetime.now().timestamp() * 1000)
+            max_age = int(now - (CONTEXT['service_timeout'] * 1000))
+
             for record in records:
                 if 3 == record['status']:
                     continue  # Record already marked with outage
@@ -208,8 +208,12 @@ async def shutdown_gracefully(_signal=None):
     except BaseException as e:
         LOGGER.warning('Could not shutdown DB gracefully - %s', e)
 
-    tasks = [t for t in asyncio.all_tasks() if t is not
-             asyncio.current_task()]
+    if hasattr(asyncio, 'all_tasks'):
+        tasks = [t for t in asyncio.all_tasks() if t is not
+                 asyncio.current_task()]
+    else:
+        tasks = [t for t in asyncio.Task.all_tasks() if t is not
+                 asyncio.Task.current_task()]
 
     LOGGER.debug('Terminating pending tasks')
 
@@ -297,13 +301,24 @@ def main():
     config = Configuration(
         args.config, {
             'server': {
-                'data_dir': '/var/lib/gullveig-server',
-                'service_timeout': '120'
+                'data_dir': '/var/lib/gullveig',
+                'service_timeout': '120',
+                'bind_to': '127.0.0.1',
+                'bind_port': '8765'
+            },
+            'mail': {
+                'enabled': 'False',
+                'smtp_from': '',
+                'smtp_to': '',
+                'smtp_host': '',
+                'smtp_port': '',
+                'smtp_user': '',
+                'smtp_password': '',
+                'smtp_mode': 'tls'
             }
         },
         {
-            'server': ['bind_to', 'bind_port', 'ssl_certificate', 'ssl_certificate_key', 'client_key'],
-            'mail': ['enabled']
+            'server': ['ssl_certificate', 'ssl_certificate_key', 'client_key'],
         }
     )
 

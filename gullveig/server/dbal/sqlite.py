@@ -31,7 +31,13 @@ class SQLite3Pool:
         self.pool: List[Connection] = []
 
     async def create(self) -> Connection:
-        conn = await aiosqlite.connect(self.dsn, timeout=1)
+        try:
+            conn = await aiosqlite.connect(self.dsn, timeout=1, uri=True)
+        except sqlite3.OperationalError as e:
+            LOGGER.exception(e)
+            LOGGER.fatal('Failed to open database %s', self.dsn)
+            exit(-1)
+
         conn.row_factory = dict_factory
         self.pool.append(conn)
         return conn

@@ -5,6 +5,7 @@ import socket
 import ssl
 import sys
 from getpass import getpass
+from os import path
 
 from cryptography import x509
 from cryptography.hazmat.backends import default_backend
@@ -12,18 +13,24 @@ from cryptography.hazmat.primitives import hashes
 
 from gullveig.common.configuration import Configuration
 
+FILE_BASEDIR = path.dirname(__file__)
+TEMPLATES_AT = path.realpath(path.join(FILE_BASEDIR, 'conf'))
+
+
+def bail(message, *args):
+    print(message, *args)
+    exit(-1)
+
 
 def pair(config):
     data_dir_cfg = config['agent']['data_dir']
     data_dir = config.resolve_config_path(data_dir_cfg)
 
     if not os.path.isdir(data_dir):
-        print('Agent data directory does not exist - %s' % data_dir)
-        exit(-1)
+        return bail('Agent data directory does not exist - %s' % data_dir)
 
     if not os.access(data_dir, os.W_OK):
-        print('Agent data directory is not writable - %s' % data_dir)
-        exit(-1)
+        return bail('Agent data directory is not writable - %s' % data_dir)
 
     server_cert_path = os.path.join(data_dir, 'server.pem')
     client_conf_path = os.path.join(data_dir, 'client.conf')
@@ -32,8 +39,7 @@ def pair(config):
         replace = input('Configuration exists - do you want to replace existing configuration? (y)es/(n)o: ')
         replace_lc = replace.lower()
         if replace_lc != 'y' and replace_lc != 'yes':
-            print('Not overriding existing configuration')
-            exit(0)
+            return bail('Not overriding existing configuration')
 
     def hash_readable(string, space_after):
         return ' '.join(string[i:i + space_after] for i in range(0, len(string), space_after))
@@ -54,28 +60,23 @@ def pair(config):
 
     server_key = getpass('Server key: ')
     if len(server_key) == 0:
-        print('Server key not provided, terminating')
-        exit(-1)
+        return bail('Server key not provided, terminating')
 
     print('Retrieving certificate for %s:%s' % (server_host, server_port))
     try:
         cert = ssl.get_server_certificate((server_host, server_port))
     except ssl.SSLError:
-        print('Failed to obtain server certificate, verify hostname and port number of the server and try again.')
-        exit(-1)
+        return bail('Failed to obtain server certificate, verify hostname and port number of the server and try again.')
     except socket.gaierror as e:
-        print('Failed to obtain server certificate - %s' % e)
-        exit(-1)
+        return bail('Failed to obtain server certificate - %s' % e)
     except ConnectionRefusedError:
-        print('Failed to connect to server, verify the server is running and accessible from this host.')
-        exit(-1)
+        return bail('Failed to connect to server, verify the server is running and accessible from this host.')
 
     try:
         cx = x509.load_pem_x509_certificate(cert.encode(), default_backend())
     except BaseException as e:
         print(e)
-        print('Failed to parse remote certificate')
-        exit(-1)
+        return bail('Failed to parse remote certificate')
 
     print('\n' + ('-' * 80))
     print('ISSUED BY : %s' % cx.issuer.rfc4514_string())
@@ -92,8 +93,7 @@ def pair(config):
     answer = input('Is above information correct? Type "confirm" to continue: ')
 
     if answer != 'confirm':
-        print('Not confirming, terminating.')
-        exit(0)
+        return bail('Not confirming, terminating.')
 
     print('Writing server certificate to %s' % server_cert_path)
 
@@ -143,13 +143,11 @@ Available commands:
         })
 
         if not config.is_file_path_valid():
-            print('Configuration file is not readable - %s', sub_args.config)
-            exit(-1)
+            return bail('Configuration file is not readable - %s', sub_args.config)
 
         config.initialize()
 
         pair(config)
         return
 
-    print('Unknown command - %s' % args.command)
-    exit(-1)
+    bail('Unknown command - %s' % args.command)

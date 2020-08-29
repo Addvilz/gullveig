@@ -1,26 +1,27 @@
-# Extending Gullveig reporting
+---
+title: Extending Gullveig
+sidebar_label: Extending Gullveig
+---
 
 You can build your own reporting modules using any language or platform of your preference.
 
-In essence, Gullveig agents can be configured to retrieve external reports from executables - scripts, binaries, anything really.
+Gullveig agents can be configured to retrieve external reports from executables - scripts, binaries and such.
 
-These external module executables are expected to produce JSON in stdout - a report. Agent will read this report and send it to reporting server for ingest.
+These external module executables are expected to produce JSON in stdout - a report. 
 
-Modules are per-agent - meaning you can have certain modules enabled only for certain agents, but not for others. That also implies that external modules need to be present on the host of each agent that is performing monitoring.
+Agent will read this report and send it to reporting server for ingest.
 
-Some example modules you could make are:
+Modules are per-agent - meaning you can have certain modules enabled only for certain agents, but not for others. 
+That also implies that external modules need to be present on the host of each agent that is querying them.
 
-- Module that calls custom REST service to retrieve reports on the same host.
-- Module that calls remote REST service to report status.
-- Anything really.
-
-You can enable external modules in agent configuration, section `modules`, for example:
+You can enable external modules in agent configuration, in section `modules`. For example:
 
 ```ini
+[modules]
 external_mod = /some/directory/example-module.py
 ```
 
-Here is an example of external module monitoring SWAP usage.
+Here is an example of external module mocking reporting on SWAP usage, written in Python.
 
 ```python
 #!/usr/bin/python
@@ -69,6 +70,7 @@ print(json.dumps({
 
 If you happen to be writing a module that could be used by wider community, consider writing it in Python and contributing it to Gullveig core modules.
 
-The principle of work for internal modules is pretty much the same as external modules, except that they are shipped with Gullveig, are always implemented in Python, and are loaded as part of the agent process itself - not as external binary or script.
+The principle how modules work is the same for internal modules as external modules, except that they are shipped with Gullveig by default, 
+are always implemented in Python, and are loaded as part of the agent process itself - not as external binary or script.
 
 See source code for existing modules in `gullveig/agent/modules` for examples on how to implement internal modules.

@@ -349,11 +349,11 @@ def main():
         args.config,
         {
             'agent': {
-                'data_dir': '/var/lib/gullveig-agent',
+                'data_dir': '/var/lib/gullveig',
                 'mod_workers': str(max_workers_default),
                 'report_delay': '5',
                 'reconnect_delay': '5',
-                'server_ko_grace': '60',
+                'server_ko_grace': '120',
                 'ping_timeout': '1'
             },
             'modules': {

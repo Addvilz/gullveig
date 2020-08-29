@@ -1,3 +1,7 @@
+* Sat Aug 29 2020 Matiss Treinis <matiss@hub256.com> - 0.1.7
+- Minor bugfixes
+- Documentation website
+
 * Tue Aug 25 2020 Matiss Treinis <matiss@hub256.com> - 0.1.6
 - Ignore squashfs mounts in mod_fs
 - Ignore read only file systems by default (switchable in mod_fs config)

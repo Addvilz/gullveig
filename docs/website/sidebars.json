@@ -1,0 +1,34 @@
+{
+  "docs": {
+    "Overview": ["overview", "webui"],
+    "Setup": [
+      "setup/setup",
+      "setup/requirements",
+      "setup/security",
+      "setup/network",
+      "setup/installation",
+      "setup/server",
+      "setup/web",
+      "setup/agent"
+    ],
+    "Configuration": [
+      "configuration/about",
+      "configuration/agent.conf",
+      "configuration/server.conf",
+      "configuration/web.conf"
+    ],
+    "Alerting": [
+      "alerting/alerting"
+    ],
+    "Modules": [
+      "modules/mod_apt",
+      "modules/mod_facter",
+      "modules/mod_fs",
+      "modules/mod_osquery",
+      "modules/mod_res",
+      "modules/mod_systemd"
+    ],
+
+    "Extending": ["extending"]
+  }
+}
