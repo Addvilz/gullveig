@@ -33,13 +33,16 @@ modules in parallel - see [agent.conf](../configuration/agent.conf.md) for how t
 
 ## Deployment checklist
 
-- Review [security considerations](./security.md)
-- Review [network setup](./network.md)
-- Review [system requirements](./requirements.md)
-- [Install Gullveig](./installation.md)
-- Deploy basic [reporting server](./server.md)
-- Deploy basic [web ui](./web.md)
-- Deploy one or more [agents](./agent.md)
+1. Review [security considerations](./security.md).
+2. Review [network setup](./network.md).
+3. Review [system requirements](./requirements.md).
+4. Read the [upgrade guide](./upgrading.md).
+5. [Install Gullveig](./installation.md).
+6. Deploy basic [reporting server](./server.md).
+7. Deploy basic [web ui](./web.md).
+8. Deploy one or more [agents](./agent.md).
+
+NOTE: you should deploy an agent on the reporting server host too.
 
 ## Configuration and defaults
 

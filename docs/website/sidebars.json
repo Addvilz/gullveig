@@ -1,6 +1,6 @@
 {
   "docs": {
-    "Overview": ["overview", "webui"],
+    "Overview": ["overview", "webui", "roadmap"],
     "Setup": [
       "setup/setup",
       "setup/requirements",
@@ -9,7 +9,8 @@
       "setup/installation",
       "setup/server",
       "setup/web",
-      "setup/agent"
+      "setup/agent",
+      "setup/upgrading"
     ],
     "Configuration": [
       "configuration/about",
@@ -28,7 +29,10 @@
       "modules/mod_res",
       "modules/mod_systemd"
     ],
-
-    "Extending": ["extending"]
+    "Advanced": [
+      "advanced/monitoring",
+      "advanced/extending",
+      "advanced/server-db"
+    ]
   }
 }
