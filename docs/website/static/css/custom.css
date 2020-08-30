@@ -234,6 +234,10 @@ article > div > span > h2:first-child {
     margin-top: 0.5em;
 }
 
+table {
+    display: table;
+}
+
 table tr:nth-child(2n) {
     background-color: #2E3440;
 }

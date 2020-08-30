@@ -22,6 +22,7 @@
       "alerting/alerting"
     ],
     "Modules": [
+      "modules/overview",
       "modules/mod_apt",
       "modules/mod_facter",
       "modules/mod_fs",
