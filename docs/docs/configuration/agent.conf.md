@@ -114,6 +114,9 @@ built in modules.
 ### mod_fs
 **Default value:** `true`
 
+### mod_lwall
+**Default value:** `false`
+
 ### mod_res
 **Default value:** `true`
 

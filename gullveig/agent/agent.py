@@ -14,7 +14,7 @@ from aiohttp import ClientSession, ClientTimeout, ClientWebSocketResponse, Clien
     WSServerHandshakeError, WSMsgType
 
 from gullveig import GULLVEIG_VERSION
-from gullveig.agent.modules import mod_facter, mod_fs, mod_res, mod_systemd, mod_apt, mod_osquery
+from gullveig.agent.modules import mod_facter, mod_fs, mod_res, mod_systemd, mod_apt, mod_osquery, mod_lwall
 from gullveig.agent.shmod import invoke_external_module, create_external_mod
 from gullveig.common.alerting import FailureObserver, AlertManager
 from gullveig.common.configuration import Configuration, ConfigurationError
@@ -51,6 +51,11 @@ EMBEDDED_MODULES = {
         'get_report': mod_osquery.get_report,
         'supports': mod_osquery.supports,
         'key': mod_osquery.key,
+    },
+    'mod_lwall': {
+        'get_report': mod_lwall.get_report,
+        'supports': mod_lwall.supports,
+        'key': mod_lwall.key,
     }
 }
 
@@ -363,6 +368,7 @@ def main():
                 'mod_systemd': 'True',
                 'mod_apt': 'False',
                 'mod_osquery': 'False',
+                'mod_lwall': 'False',
             },
             'mod_systemd': {},
             'mod_fs': {
@@ -371,6 +377,12 @@ def main():
             'mod_osquery': {
                 'config': 'osquery.yml'
             },
+            'mod_lwall': {
+                'policy_any': 'restrict',
+                'policy_loopback': 'restrict',
+                'policy_bound': 'restrict',
+            },
+            'mod_lwall_map': {},
             'mail': {
                 'enabled': 'False',
                 'smtp_from': '',

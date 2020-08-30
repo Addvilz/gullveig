@@ -1,4 +1,4 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import {Pipe, PipeTransform} from '@angular/core';
 
 @Pipe({name: 'f_health_name'})
 export class HealthNamePipe implements PipeTransform {
@@ -10,7 +10,7 @@ export class HealthNamePipe implements PipeTransform {
       return 'Incident';
     }
     if (status === 2) {
-      return 'Outage';
+      return 'Critical';
     }
     if (status === 3) {
       return 'Unknown';

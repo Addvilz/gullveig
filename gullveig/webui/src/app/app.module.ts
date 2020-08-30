@@ -20,14 +20,13 @@ import {MetaViewIndexComponent} from './views/meta-view/meta-view-index/meta-vie
 import {MetaViewDashboardComponent} from './views/meta-view/meta-view-dashboard/meta-view-dashboard.component';
 import {ChartComponent} from './components/chart/chart.component';
 import {HealthViewComponent} from './views/health-view/health-view.component';
-import {AppJsonViewComponent} from './components/json-view/app-json-view.component';
-import {JsonViewComponent} from './components/json-view/json-view.component';
 import {AboutViewComponent} from './views/about-view/about-view.component';
 import {SignInViewComponent} from './views/sign-in-view/sign-in-view.component';
 import {AuthGuard} from './auth.guard';
 import {HealthNamePipe} from './pipes/HealthName.pipe';
 import {HealthClassPipe} from './pipes/HealthClass.pipe';
-import { NoDataComponent } from './components/no-data/no-data.component';
+import {NoDataComponent} from './components/no-data/no-data.component';
+import {DataViewComponent} from './components/data-view/data-view.component';
 
 @NgModule({
   declarations: [
@@ -47,11 +46,11 @@ import { NoDataComponent } from './components/no-data/no-data.component';
     MetaViewDashboardComponent,
     ChartComponent,
     HealthViewComponent,
-    AppJsonViewComponent,
-    JsonViewComponent,
     AboutViewComponent,
     SignInViewComponent,
     NoDataComponent,
+    MetaViewComponent,
+    DataViewComponent
   ],
   imports: [
     BrowserModule,

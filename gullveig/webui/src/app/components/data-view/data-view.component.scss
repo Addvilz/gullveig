@@ -1,0 +1,57 @@
+@import "~nord/src/sass/nord";
+
+:host {
+  font-family: 'SF Mono', 'source code pro', consolas, 'courier new', courier, monospace;
+
+  div.data-view div.data-view {
+    box-sizing: border-box;
+    padding-top: 0.3rem;
+    padding-left: 0.6rem;
+    padding-bottom: 0.3rem;
+    margin-bottom: 0.3rem;
+    border-left: 1px solid $nord2;
+    border-bottom: 1px solid $nord2;
+
+    &:hover {
+      border-left-color: $nord10;
+      border-bottom-color: $nord10;
+    }
+  }
+
+  div.item:not(:last-child) {
+    margin-bottom: 0.3rem;
+  }
+
+  div.data-view {
+    span.value {
+      user-select: all;
+      color: $nord8;
+
+      &.false {
+        color: $nord11;
+      }
+
+      &.true {
+        color: $nord14;
+      }
+
+      &.none {
+        color: $nord13;
+      }
+
+      &.number {
+        color: $nord10;
+      }
+    }
+
+    span.key {
+      color: $nord15;
+      font-weight: 500;
+    }
+  }
+
+  span.item-count {
+    margin-left: 0.3rem;
+    color: lighten($nord3, 20%);
+  }
+}

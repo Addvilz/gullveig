@@ -25,6 +25,7 @@
       "modules/mod_apt",
       "modules/mod_facter",
       "modules/mod_fs",
+      "modules/mod_lwall",
       "modules/mod_osquery",
       "modules/mod_res",
       "modules/mod_systemd"

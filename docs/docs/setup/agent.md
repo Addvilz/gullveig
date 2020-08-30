@@ -87,6 +87,7 @@ Modify the configuration options where required.
 
 ;mod_facter = true
 ;mod_fs = true
+;mod_lwall = false
 ;mod_res = true
 ;mod_systemd = true
 ;mod_apt = false
