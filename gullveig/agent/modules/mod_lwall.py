@@ -34,7 +34,7 @@ class Interface:
                 return
             if '::' == iface:
                 self.any = True
-                return
+            return
 
         if family is AddressFamily.AF_INET:
             self.family = 'IPv4'
@@ -45,9 +45,9 @@ class Interface:
                 return
             if '0.0.0.0' == iface:
                 self.any = True
-                return
+            return
 
-        raise RuntimeError('Unsupported address family')
+        raise RuntimeError('Unsupported address family - %s' % family)
 
     def match_val(self) -> str:
         if self.any:
