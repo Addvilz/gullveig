@@ -4,7 +4,9 @@ from asyncio import base_events
 
 from gullveig import bootstrap_default_logger
 
-base_events._FATAL_ERROR_IGNORE = ssl.SSLCertVerificationError
+# Compat with < 3.7
+if hasattr(ssl, 'SSLCertVerificationError'):
+    base_events._FATAL_ERROR_IGNORE = ssl.SSLCertVerificationError
 
 
 def _configure_default_agent_logger():

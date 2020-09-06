@@ -114,7 +114,7 @@ def invoke_module(module, config):
 
 async def construct_report(pool):
     config = CONTEXT['config']
-    loop = asyncio.get_running_loop()
+    loop = asyncio.get_event_loop()
 
     data = {
         'meta': {'time': current_ts()},
