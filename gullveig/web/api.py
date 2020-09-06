@@ -31,7 +31,7 @@ def create_metric_key(mod, subject, metric):
 async def bootstrap(config: Configuration, _: Application) -> None:
     sqlite_db_path = config['server']['data_dir']
     sqlite_dsn = 'file:%s/gullveig.sqlite3?mode=ro&cache=private' % sqlite_db_path
-    dbi.db = await aiosqlite.connect(sqlite_dsn)
+    dbi.db = await aiosqlite.connect(sqlite_dsn, uri=True)
     dbi.db.row_factory = DBI.dict_factory
 
 
