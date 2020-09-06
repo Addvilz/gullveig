@@ -114,7 +114,7 @@ def invoke_module(module, config):
 
 async def construct_report(pool):
     config = CONTEXT['config']
-    loop = asyncio.get_running_loop()
+    loop = asyncio.get_event_loop()
 
     data = {
         'meta': {'time': current_ts()},
@@ -255,8 +255,12 @@ async def shutdown(_signal, loop, pool):
     LOGGER.info('Received %s, shutting down...', _signal.name)
     pool.shutdown(wait=True)
 
-    tasks = [t for t in asyncio.all_tasks() if t is not
-             asyncio.current_task()]
+    if hasattr(asyncio, 'all_tasks'):
+        tasks = [t for t in asyncio.all_tasks() if t is not
+                 asyncio.current_task()]
+    else:
+        tasks = [t for t in asyncio.Task.all_tasks() if t is not
+                 asyncio.Task.current_task()]
 
     for task in tasks:
         task.cancel()
@@ -314,7 +318,7 @@ def start(config):
 
     with ProcessPoolExecutor(max_workers=num_workers) as pool:
         for it in (signal.SIGTERM, signal.SIGHUP, signal.SIGINT):
-            loop.add_signal_handler(it, lambda _si=it: asyncio.create_task(shutdown(_si, loop, pool)))
+            loop.add_signal_handler(it, lambda _si=it: asyncio.ensure_future(shutdown(_si, loop, pool)))
 
         try:
             loop.run_until_complete(ws_client(pool))
