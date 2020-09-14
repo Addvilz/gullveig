@@ -28,6 +28,23 @@ body {
   color: #efefef;
 }
 
+* {
+  /*noinspection CssUnknownProperty*/
+  scrollbar-color: #596780 #252831;
+}
+
+*::-webkit-scrollbar {
+  background-color: #252831;
+}
+
+*::-webkit-scrollbar-track {
+  background-color: #252831;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #596780;
+}
+
 html, body {
   margin: 0;
   padding: 0;

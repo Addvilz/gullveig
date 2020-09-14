@@ -27,6 +27,7 @@ import {HealthNamePipe} from './pipes/HealthName.pipe';
 import {HealthClassPipe} from './pipes/HealthClass.pipe';
 import {NoDataComponent} from './components/no-data/no-data.component';
 import {DataViewComponent} from './components/data-view/data-view.component';
+import {NgVarDirective} from './directives/ng-var.directive';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import {DataViewComponent} from './components/data-view/data-view.component';
     SignInViewComponent,
     NoDataComponent,
     MetaViewComponent,
-    DataViewComponent
+    DataViewComponent,
+    NgVarDirective
   ],
   imports: [
     BrowserModule,

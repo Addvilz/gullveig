@@ -48,6 +48,67 @@
       color: $nord15;
       font-weight: 500;
     }
+
+    div.table-wrap {
+      overflow: auto;
+      border: 1px solid $nord2;
+    }
+
+    table {
+      border-collapse: collapse;
+      min-width: 100%;
+
+      td, th {
+        border: 1px solid $nord2;
+        padding-left: 3px;
+        padding-right: 3px;
+      }
+
+      thead > tr > th {
+        text-align: left;
+        border-top: 0;
+
+        &:first-child {
+          border-left: 0;
+        }
+
+        &:last-child {
+          border-right: 0;
+        }
+      }
+
+      tbody > tr > td,
+      tbody > tr > th
+      {
+        border-bottom: 0;
+
+        &:first-child {
+          border-left: 0;
+        }
+
+        &:last-child {
+          border-right: 0;
+        }
+      }
+
+      th {
+        font-weight: normal;
+        color: $nord10;
+      }
+
+      tbody > tr > th {
+        text-align: right;
+      }
+
+      tbody > tr > th,
+      tbody > tr > td, {
+        white-space: nowrap
+      }
+
+      tbody > tr > td:last-child {
+       width: 95%;
+      }
+    }
   }
 
   span.item-count {
