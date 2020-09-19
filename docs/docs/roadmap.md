@@ -7,10 +7,6 @@ This section documents pending changes, upcoming features and future expansion p
 
 ## Agent
 
-### Planned architecture changes
-
-- Detach module invocation from reporting loop, have reports gathered independently of reporting.
-
 ### Planned features
 
 - Remote configuration - ability to receive and automatically reload configuration from reporting server.
@@ -20,14 +16,16 @@ This section documents pending changes, upcoming features and future expansion p
 
 #### Near future
 
+- mod_rpm - pending system updates for RPM based systems.
 - mod_http - check if a remote HTTP endpoint is reachable, with timeouts and latency check.
 - mod_rport - check if a remote TCP port is open, with timeouts and latency check.
 - mod_cert - check if a remote HTTP certificate is valid and non-expired. Alert N hours before expiry.
 - mod_iload - monitor per-interface bandwidth utilization, issue alerts on thresholds.
-- mod_fail2ban - report fail2ban metrics. 
+- mod_fail2ban - report fail2ban metrics.
 
 #### Later
 
+- mod_pkgcvs
 - mod_authevent - report authentication events using `pam_exec` receiver. Depends on events feature.
 - mod_snmp - SNMP query module.
 - mod_oscap - monitor OpenSCAP compliance.

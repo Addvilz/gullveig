@@ -6,12 +6,14 @@ import signal
 import socket
 import ssl
 from concurrent.futures._base import Executor, CancelledError
-from concurrent.futures.process import ProcessPoolExecutor
 from datetime import datetime
 from os import path, sched_getaffinity
 
 from aiohttp import ClientSession, ClientTimeout, ClientWebSocketResponse, ClientConnectorError, \
     WSServerHandshakeError, WSMsgType
+from apscheduler.events import EVENT_JOB_EXECUTED, JobExecutionEvent
+from apscheduler.executors.pool import ProcessPoolExecutor
+from apscheduler.schedulers.background import BackgroundScheduler
 
 from gullveig import GULLVEIG_VERSION
 from gullveig.agent.modules import mod_facter, mod_fs, mod_res, mod_systemd, mod_apt, mod_osquery, mod_lwall
@@ -21,6 +23,7 @@ from gullveig.common.configuration import Configuration, ConfigurationError
 
 LOGGER = logging.getLogger('gullveig-agent')
 CONTEXT = {}
+REPORT_BUFFER = {}
 EMBEDDED_MODULES = {
     'mod_facter': {
         'get_report': mod_facter.get_report,
@@ -73,7 +76,7 @@ def get_runtime_modules(module_config):
             is_enabled = module_config.getboolean(module)
             if not is_enabled:
                 continue
-            runtime_modules.append({'module': EMBEDDED_MODULES[module]})
+            runtime_modules.append({'id': module, 'module': EMBEDDED_MODULES[module]})
             continue
 
         # External modules
@@ -85,6 +88,7 @@ def get_runtime_modules(module_config):
             exit(-1)
 
         runtime_modules.append({
+            'id': module,
             'module': create_external_mod(module, val)
         })
 
@@ -100,6 +104,8 @@ def invoke_module(module, config):
             return None
 
     try:
+        LOGGER.debug('Invoking internal module %s', module['module']['key']())
+
         if not module['module']['supports']():
             return None
 
@@ -112,30 +118,61 @@ def invoke_module(module, config):
         return None
 
 
-async def construct_report(pool):
-    config = CONTEXT['config']
-    loop = asyncio.get_event_loop()
+async def aggregate_pending_reports():
+    if 0 == len(REPORT_BUFFER):
+        return None
 
     data = {
         'meta': {'time': current_ts()},
         'mod_reports': []
     }
 
-    # TODO - reporting intervals per each module
-    tasks = [loop.run_in_executor(
-        pool,
-        invoke_module,
-        module,
-        config
-    ) for module in CONTEXT['runtime_modules']]
+    expire_interval_s = CONTEXT['config']['agent'].getint('default_expires_after')
+    expired_if_before_default = current_ts() - (expire_interval_s * 1000)
 
-    results = await asyncio.gather(*tasks)
-
-    for result in results:
-        if not result:
+    for (job_id, job_result) in REPORT_BUFFER.items():
+        if job_result is None:
             continue
 
-        data['mod_reports'].append(result)
+        job_expired_if_before = expired_if_before_default
+        module_reporting_config = CONTEXT['config']['module_reporting']
+        module_expires_after_key = '%s_expires_after' % job_id
+
+        if module_expires_after_key in module_reporting_config:
+            module_expires_after = module_reporting_config.getint(module_expires_after_key)
+            job_expired_if_before = current_ts() - (module_expires_after * 1000)
+            LOGGER.debug('Validating cache for job %s is no older than %d seconds', job_id, module_expires_after)
+        else:
+            LOGGER.debug('Validating cache for job %s is no older than %d seconds (default)', job_id, expire_interval_s)
+
+        if job_result['ts'] < job_expired_if_before:
+            LOGGER.debug('Module report expired, ignoring - %s', job_id)
+            REPORT_BUFFER[job_id] = None
+            continue
+
+        if job_result['is_reported']:
+            # Keep pinging status, but ignore metrics and meta
+            if 'status' not in job_result['result']['report']:
+                LOGGER.debug('Skipping module report for %s - no status items', job_id)
+                continue
+
+            if 0 == len(job_result['result']['report']['status']):
+                LOGGER.debug('Skipping module report for %s - no status items', job_id)
+                continue
+
+            LOGGER.debug('Will ping status for %s (cached)', job_id)
+
+            data['mod_reports'].append({
+                'module': job_result['result']['module'],
+                'report': {
+                    'status': job_result['result']['report']['status']
+                },
+            })
+            continue
+
+        data['mod_reports'].append(job_result['result'])
+
+        job_result['is_reported'] = True
 
     if 0 == len(data['mod_reports']):
         return None
@@ -147,14 +184,14 @@ class ProtocolError(RuntimeError):
     pass
 
 
-async def handle_socket(ws: ClientWebSocketResponse, pool: Executor):
+async def handle_socket(ws: ClientWebSocketResponse):
     report_delay = CONTEXT['config']['agent'].getint('report_delay')
 
     while True:
         LOGGER.debug('Creating report')
 
         time = datetime.now()
-        report = await construct_report(pool)
+        report = await aggregate_pending_reports()
         elapsed = datetime.now() - time
 
         LOGGER.debug('Report created in %s', elapsed)
@@ -165,6 +202,7 @@ async def handle_socket(ws: ClientWebSocketResponse, pool: Executor):
             continue
 
         await ws.ping()
+
         resp = await ws.receive(timeout=CONTEXT['config']['agent'].getint('ping_timeout'))
 
         if resp.type == WSMsgType.CLOSED:
@@ -184,7 +222,7 @@ async def handle_socket(ws: ClientWebSocketResponse, pool: Executor):
         await asyncio.sleep(report_delay)
 
 
-async def handle_session(session: ClientSession, pool: Executor, on_connected):
+async def handle_session(session: ClientSession, on_connected):
     server_url = 'https://%s:%s/' % (CONTEXT['server_host'], CONTEXT['server_port'])
 
     options = {
@@ -201,10 +239,10 @@ async def handle_session(session: ClientSession, pool: Executor, on_connected):
     async with session.ws_connect(**options) as web_socket:
         LOGGER.info('Connected to server at %s:%s', CONTEXT['server_host'], CONTEXT['server_port'])
         on_connected()
-        await handle_socket(web_socket, pool)
+        await handle_socket(web_socket)
 
 
-async def ws_client(pool):
+async def ws_client():
     server_ko_grace = CONTEXT['config']['agent'].getint('server_ko_grace')
     client_session_timeout = ClientTimeout(total=10)
     alert_manager = AlertManager(CONTEXT['config'], LOGGER)
@@ -213,7 +251,7 @@ async def ws_client(pool):
     while True:
         try:
             async with ClientSession(timeout=client_session_timeout) as session:
-                await handle_session(session, pool, ko.reset)
+                await handle_session(session, ko.reset)
         except ClientConnectorError as e:
             ko.mark_failure(e)
             LOGGER.error('Failed to connect to server - network error, connect call failed')
@@ -251,9 +289,14 @@ async def ws_client(pool):
                 ko.mark_handled()
 
 
-async def shutdown(_signal, loop, pool):
+async def shutdown(_signal, loop):
     LOGGER.info('Received %s, shutting down...', _signal.name)
-    pool.shutdown(wait=True)
+
+    if 'scheduler' in CONTEXT:
+        try:
+            CONTEXT['scheduler'].shutdown()
+        except BaseException as e:
+            LOGGER.warning('Scheduler shutdown failed - %s', e)
 
     if hasattr(asyncio, 'all_tasks'):
         tasks = [t for t in asyncio.all_tasks() if t is not
@@ -268,6 +311,56 @@ async def shutdown(_signal, loop, pool):
     LOGGER.debug('Terminating pending tasks')
     await asyncio.gather(*tasks, return_exceptions=False)
     loop.stop()
+
+
+def on_job_complete(event: JobExecutionEvent):
+    if not event.retval:
+        # TODO: log
+        return
+
+    if not isinstance(event.retval, dict):
+        # TODO LOG
+        return
+
+    REPORT_BUFFER[event.job_id] = {
+        'job': event.job_id,
+        'ts': current_ts(),
+        'result': event.retval,
+        'is_reported': False
+    }
+
+
+def schedule_reporting(modules, scheduler: BackgroundScheduler):
+    default_fetch_every = CONTEXT['config']['agent'].getint('default_fetch_every')
+
+    def get_module_delay(module_id):
+        module_reporting_config = CONTEXT['config']['module_reporting']
+        delay_key = '%s_fetch_every' % module_id
+
+        if delay_key in module_reporting_config:
+            module_specific_every = module_reporting_config.getint(delay_key)
+            LOGGER.debug('Module %s is scheduled to run every %d seconds', module_id, module_specific_every)
+            return module_specific_every
+
+        LOGGER.debug('Module %s is scheduled to run every %d seconds (default)', module_id, default_fetch_every)
+
+        return default_fetch_every
+
+    [scheduler.add_job(
+        invoke_module,
+        'interval',
+        seconds=get_module_delay(module['id']),
+        max_instances=1,
+        id=module['id'],
+        name=module['id'],
+        next_run_time=datetime.now(),  # Schedule first run to be ASAP
+        args=[
+            module,
+            CONTEXT['config']
+        ]
+    ) for module in modules]
+
+    scheduler.add_listener(on_job_complete, EVENT_JOB_EXECUTED)
 
 
 def start(config):
@@ -307,24 +400,30 @@ def start(config):
     CONTEXT['client_key'] = client_config['client']['client_key']
     CONTEXT['server_host'] = client_config['client']['server_host']
     CONTEXT['server_port'] = client_config['client']['server_port']
-    CONTEXT['runtime_modules'] = get_runtime_modules(config['modules'])
+
+    num_workers = config['agent'].getint('mod_workers')
+    LOGGER.debug('Will assign %d workers to mod execution', num_workers)
+    CONTEXT['scheduler'] = BackgroundScheduler(
+        logger=LOGGER,
+        executors={
+            'default': ProcessPoolExecutor(max_workers=num_workers)
+        }
+    )
+    schedule_reporting(get_runtime_modules(config['modules']), CONTEXT['scheduler'])
+    CONTEXT['scheduler'].start()
 
     LOGGER.debug('Starting ws_client')
 
     loop = asyncio.get_event_loop()
-    num_workers = config['agent'].getint('mod_workers')
 
-    LOGGER.debug('Will assign %d workers to mod execution', num_workers)
+    for it in (signal.SIGTERM, signal.SIGHUP, signal.SIGINT):
+        loop.add_signal_handler(it, lambda _si=it: asyncio.ensure_future(shutdown(_si, loop)))
 
-    with ProcessPoolExecutor(max_workers=num_workers) as pool:
-        for it in (signal.SIGTERM, signal.SIGHUP, signal.SIGINT):
-            loop.add_signal_handler(it, lambda _si=it: asyncio.ensure_future(shutdown(_si, loop, pool)))
-
-        try:
-            loop.run_until_complete(ws_client(pool))
-        except CancelledError:
-            LOGGER.info('Terminated')
-            exit(0)
+    try:
+        loop.run_until_complete(ws_client())
+    except CancelledError:
+        LOGGER.info('Terminated')
+        exit(0)
 
     loop.close()
 
@@ -363,7 +462,12 @@ def main():
                 'report_delay': '5',
                 'reconnect_delay': '5',
                 'server_ko_grace': '120',
-                'ping_timeout': '1'
+                'ping_timeout': '1',
+                'default_fetch_every': '5',
+                'default_expires_after': '30',
+            },
+            'module_reporting': {
+
             },
             'modules': {
                 'mod_facter': 'True',

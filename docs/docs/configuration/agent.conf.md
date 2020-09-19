@@ -36,7 +36,8 @@ Number of workers to use to gather information.
 ### report_delay
 **Default value:** `5`
 
-Seconds to wait between sending reports.
+Seconds to wait between sending reports to the server. Should not be larger than the value
+of `default_fetch_every` or smalled fetch_every value for module specific fetch delay.
 
 ### reconnect_delay
 **Default value:** `10`
@@ -52,6 +53,46 @@ Approximate delay, in seconds, between when a server connection is lost and aler
 **Default value:** `1`
 
 Timeout, in seconds, to wait for server to respond for health checks. This value should be increases for slow/unstable networks.
+
+### default_fetch_every
+**Default value:** `5`
+
+**Introduced in version:** 0.1.16
+
+Delay, in seconds, between module invocations. By default, all modules are scheduled to be invoked every 5 seconds.
+
+### default_expires_after
+**Default value:** `30`
+
+**Introduced in version:** 0.1.16
+
+Number of seconds after which a report is considered stale. Should be reasonably long to prevent reports expiring
+in the middle of the module execution cycle.
+
+See [module report cache and expiry](../advanced/reporting.md#module-report-caching-and-expiry) for
+more information.
+
+## Section [module_reporting]
+Per-module reporting settings. `*` - name of the module, for example `mod_fs_fetch_every` would apply 
+`*_fetch_every` to `mod_fs`.
+
+### *_fetch_every
+**Default value:** value of `[agent][default_fetch_every]`
+
+**Introduced in version:** 0.1.16
+
+Delay, in seconds, between module invocations.
+
+### *_expires_after
+**Default value:** value of `[agent][default_expires_after]`
+
+**Introduced in version:** 0.1.16
+
+Number of seconds after which a report from this module is considered stale. Must not be smaller than `[agent][report_delay]`.
+Recommended minimum is (`*_fetch_every` + module execution time) * 2.
+
+See [module report cache and expiry](../advanced/reporting.md#module-report-caching-and-expiry) for
+more information.
 
 ## Section [mail]
 

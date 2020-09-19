@@ -32,6 +32,7 @@
       "modules/mod_systemd"
     ],
     "Advanced": [
+      "advanced/reporting",
       "advanced/monitoring",
       "advanced/extending",
       "advanced/server-db"

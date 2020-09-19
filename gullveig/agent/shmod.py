@@ -1,10 +1,15 @@
 import json
+import logging
 import os
 import subprocess
+
+LOGGER = logging.getLogger('gullveig-agent')
 
 
 def invoke_external_module(module):
     cmd = module['cmd'].split()
+
+    LOGGER.debug('Invoking internal module %s', module['id'])
 
     if len(cmd) == 0:
         raise RuntimeError('Empty command for module %s' % module['id'])

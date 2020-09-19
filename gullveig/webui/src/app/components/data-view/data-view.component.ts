@@ -16,6 +16,10 @@ export class DataViewComponent {
 
   isTabular(data: any) {
     if (isArray(data)) {
+      if (0 === data.length) {
+        return false;
+      }
+
       for (const item of data) {
         if (isSimple(item)) {
           return false;
@@ -35,6 +39,10 @@ export class DataViewComponent {
     }
 
     if (isObject(data)) {
+      if (0 === Object.keys(data).length) {
+        return false;
+      }
+
       for (const item of Object.values(data)) {
         if (isSimple(item)) {
           return false;
