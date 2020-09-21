@@ -16,7 +16,8 @@ from apscheduler.executors.pool import ProcessPoolExecutor
 from apscheduler.schedulers.background import BackgroundScheduler
 
 from gullveig import GULLVEIG_VERSION
-from gullveig.agent.modules import mod_facter, mod_fs, mod_res, mod_systemd, mod_apt, mod_osquery, mod_lwall, mod_pkg
+from gullveig.agent.modules import mod_facter, mod_fs, mod_res, mod_systemd, mod_apt, mod_osquery, mod_lwall, mod_pkg, \
+    mod_collectd
 from gullveig.agent.shmod import invoke_external_module, create_external_mod
 from gullveig.common.alerting import FailureObserver, AlertManager
 from gullveig.common.configuration import Configuration, ConfigurationError
@@ -64,6 +65,11 @@ EMBEDDED_MODULES = {
         'get_report': mod_pkg.get_report,
         'supports': mod_pkg.supports,
         'key': mod_pkg.key,
+    },
+    'mod_collectd': {
+        'get_report': mod_collectd.get_report,
+        'supports': mod_collectd.supports,
+        'key': mod_collectd.key,
     }
 }
 
@@ -484,6 +490,7 @@ def main():
                 'mod_osquery': 'False',
                 'mod_lwall': 'False',
                 'mod_pkg': 'True',
+                'mod_collectd': 'False',
             },
             'mod_systemd': {},
             'mod_fs': {
@@ -501,6 +508,10 @@ def main():
             'mod_pkg': {
                 'upgrade_warn': 'False',
             },
+            'mod_collectd': {
+                'socket': '/var/run/collectd-unixsocket-gullveig',
+            },
+            'mod_collectd_values': {},
             'mail': {
                 'enabled': 'False',
                 'smtp_from': '',

@@ -32,6 +32,7 @@ export class MetricsViewDashboardComponent implements OnInit, OnDestroy {
 
     this.route.params.subscribe(it => {
       this.ident.next(it.ident);
+
       if (it.mhash) {
         this.selected = it.mhash;
       }

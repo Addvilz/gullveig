@@ -5,7 +5,7 @@
       <div mat-subheader>
         <b>{{ident.value}}</b>
       </div>
-      <mat-list-item (click)="select(i)" *ngFor="let meta of metas; let i = index" [class.active]="meta === selected.value"
+      <mat-list-item (click)="select(i)" *ngFor="let meta of metas; let i = index" [class.active]="i === selected.value"
                      role="listitem">
         {{ meta.mod }}
       </mat-list-item>

@@ -24,6 +24,7 @@
     "Modules": [
       "modules/overview",
       "modules/mod_apt",
+      "modules/mod_collectd",
       "modules/mod_facter",
       "modules/mod_fs",
       "modules/mod_lwall",

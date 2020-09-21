@@ -13,12 +13,13 @@
     position: relative;
 
     .left {
-      width: 250px;
+      width: 270px;
       background: $nord1;
       overflow-y: auto;
 
       .mat-list-item {
-        height: 26px;
+        min-height: 26px;
+        height: auto;
         color: #cecece;
       }
 
