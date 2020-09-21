@@ -1,6 +1,8 @@
 import importlib
 import logging
 
+from gullveig.agent.lib.nativedp import has_python_library
+
 LOGGER = logging.getLogger('gullveig-agent')
 
 
@@ -9,12 +11,7 @@ def key():
 
 
 def supports():
-    if not hasattr(importlib, 'util'):
-        spec = importlib.find_loader('apt')
-    else:
-        spec = importlib.util.find_spec('apt')
-
-    return spec is not None
+    return has_python_library('apt')
 
 
 def get_report(config):

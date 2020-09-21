@@ -5,13 +5,19 @@
       <div mat-subheader>
         <b>{{ident.value}}</b>
       </div>
-      <mat-list-item (click)="select(meta)" *ngFor="let meta of metas" [class.active]="meta === selected.value"
+      <mat-list-item (click)="select(i)" *ngFor="let meta of metas; let i = index" [class.active]="meta === selected.value"
                      role="listitem">
         {{ meta.mod }}
       </mat-list-item>
     </mat-action-list>
   </div>
   <div #right class="right">
-    <app-data-view *ngIf="null !== selected.value" [data]="selected.value?.meta"></app-data-view>
+    <div class="meta-last-update" *ngIf="null !== selected.value">
+      <span [title]="metas[selected.value].updated_at | date:'yyyy-MM-dd HH:mm:ss'">
+        Last updated {{metas[selected.value].updated_at | f_ts_ago}}
+      </span>
+    </div>
+    <app-data-view *ngIf="null !== selected.value" [data]="metas[selected.value].meta"></app-data-view>
+    <div class="spacer"></div>
   </div>
 </section>

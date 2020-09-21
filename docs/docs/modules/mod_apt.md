@@ -7,6 +7,10 @@ sidebar_label: mod_apt
 
 This module monitors for pending system updates in APT based systems.
 
+> Deprecated as of version 0.1.18, replaced by [mod_pkg](./mod_pkg.md).
+
+> This module will be removed in version 1.0.0.
+
 ## System requirements
 
 - Can only be used in APT based Linux distributions, such as Debian, Ubuntu, etc.

@@ -16,7 +16,7 @@ from apscheduler.executors.pool import ProcessPoolExecutor
 from apscheduler.schedulers.background import BackgroundScheduler
 
 from gullveig import GULLVEIG_VERSION
-from gullveig.agent.modules import mod_facter, mod_fs, mod_res, mod_systemd, mod_apt, mod_osquery, mod_lwall
+from gullveig.agent.modules import mod_facter, mod_fs, mod_res, mod_systemd, mod_apt, mod_osquery, mod_lwall, mod_pkg
 from gullveig.agent.shmod import invoke_external_module, create_external_mod
 from gullveig.common.alerting import FailureObserver, AlertManager
 from gullveig.common.configuration import Configuration, ConfigurationError
@@ -59,6 +59,11 @@ EMBEDDED_MODULES = {
         'get_report': mod_lwall.get_report,
         'supports': mod_lwall.supports,
         'key': mod_lwall.key,
+    },
+    'mod_pkg': {
+        'get_report': mod_pkg.get_report,
+        'supports': mod_pkg.supports,
+        'key': mod_pkg.key,
     }
 }
 
@@ -100,7 +105,7 @@ def invoke_module(module, config):
         try:
             return invoke_external_module(module['module'])
         except BaseException as e:
-            LOGGER.error('Failed to run external module, skipping - %s', e)
+            LOGGER.error('Failed to run external module, skipping - %s', e, exc_info=e)
             return None
 
     try:
@@ -114,7 +119,7 @@ def invoke_module(module, config):
             'report': module['module']['get_report'](config)
         }
     except BaseException as e:
-        LOGGER.error('Failed to run module, skipping - %s', e)
+        LOGGER.error('Failed to run module, skipping - %s', e, exc_info=e)
         return None
 
 
@@ -467,7 +472,8 @@ def main():
                 'default_expires_after': '30',
             },
             'module_reporting': {
-
+                'mod_pkg_fetch_every': '600',
+                'mod_pkg_expires_after': '660',
             },
             'modules': {
                 'mod_facter': 'True',
@@ -477,6 +483,7 @@ def main():
                 'mod_apt': 'False',
                 'mod_osquery': 'False',
                 'mod_lwall': 'False',
+                'mod_pkg': 'True',
             },
             'mod_systemd': {},
             'mod_fs': {
@@ -491,6 +498,9 @@ def main():
                 'policy_bound': 'restrict',
             },
             'mod_lwall_map': {},
+            'mod_pkg': {
+                'upgrade_warn': 'False',
+            },
             'mail': {
                 'enabled': 'False',
                 'smtp_from': '',

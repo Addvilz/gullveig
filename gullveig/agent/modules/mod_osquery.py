@@ -4,6 +4,7 @@ from os import path
 
 import yaml
 
+from gullveig.agent.lib.nativedp import has_python_library
 from gullveig.agent.modules import get_resource_threshold_exceeded
 
 LOGGER = logging.getLogger('gullveig-agent')
@@ -21,12 +22,7 @@ def key():
 
 
 def supports():
-    if not hasattr(importlib, 'util'):
-        spec = importlib.find_loader('osquery')
-    else:
-        spec = importlib.util.find_spec('osquery')
-
-    return spec is not None
+    return has_python_library('osquery')
 
 
 def get_report(config):

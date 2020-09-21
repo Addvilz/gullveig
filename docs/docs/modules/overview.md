@@ -14,3 +14,4 @@ These modules are available by default. This list is aligned to the latest versi
 | [mod_osquery](./mod_osquery.md) 	| Metrics, status and metadata sourcing from osquery 	| No                 	|
 | [mod_res](./mod_res.md)     	    | Report and monitor host CPU, RAM and SWAP usage    	| Yes                	|
 | [mod_systemd](./mod_systemd.md) 	| Monitor systemd service status                     	| Yes                	|
+| [mod_pkg](./mod_pkg.md) 	        | Monitor package sources for updates                  	| Yes                	|

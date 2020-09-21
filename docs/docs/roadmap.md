@@ -5,31 +5,34 @@ sidebar_label: Roadmap
 
 This section documents pending changes, upcoming features and future expansion plans for Gullveig.
 
+Please, open a ticket or comment on existing ticket before working on any code changes to avoid code conflicts and
+to confirm that your changes can be incorporated in the codebase before spending time implementing them.
+
+See the [contributions policy](https://github.com/Addvilz/gullveig/blob/master/CONTRIBUTING.md) for more information.
+
 ## Agent
 
 ### Planned features
 
 - Remote configuration - ability to receive and automatically reload configuration from reporting server.
-- Ability to specify module invocation intervals per individual module. Each module report should have "expiry" time after which the report is discarded and should be no longer reported as actual.
 
 ### Planned modules
 
 #### Near future
 
-- mod_rpm - pending system updates for RPM based systems.
 - mod_http - check if a remote HTTP endpoint is reachable, with timeouts and latency check.
 - mod_rport - check if a remote TCP port is open, with timeouts and latency check.
 - mod_cert - check if a remote HTTP certificate is valid and non-expired. Alert N hours before expiry.
-- mod_iload - monitor per-interface bandwidth utilization, issue alerts on thresholds.
-- mod_fail2ban - report fail2ban metrics.
+- mod_ifload - monitor per-interface bandwidth utilization, issue alerts on thresholds.
 
 #### Later
 
-- mod_pkgcvs
+- mod_pkg_cve - check installed packages against CVE vulnerabilities.
 - mod_authevent - report authentication events using `pam_exec` receiver. Depends on events feature.
 - mod_snmp - SNMP query module.
 - mod_oscap - monitor OpenSCAP compliance.
 - mod_pdnsrec - monitor PowerDNS recursor.
+- mod_fail2ban - report fail2ban metrics.
 
 ## Server
 

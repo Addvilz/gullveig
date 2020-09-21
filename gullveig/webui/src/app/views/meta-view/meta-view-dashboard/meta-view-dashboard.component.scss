@@ -33,6 +33,16 @@
       flex: 1;
       height: 100%;
       overflow-y: auto;
+
+      & > .meta-last-update {
+        text-align: right;
+        font-size: 0.9rem;
+        color: $nord10;
+      }
+
+      & > .spacer {
+        height: 100px;
+      }
     }
   }
 }

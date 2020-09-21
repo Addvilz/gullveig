@@ -11,19 +11,26 @@ using nearly any platform or programming language.
 
 ## Core features
 
-- Distributed and scalable agent based architecture
-- Modern, easy to use web interface
-- Time series graphs for resources, counters, metrics and performance data
-- Double-redundant bi-directional remote monitoring
-- Automated alerting and notifications about status changes
-- Rich interface for remote fact discovery
-- Interactive status dashboard
-- Simple, file based configuration
-- Wide operating system support (written in Python 3)
-- Does not depend on third party software for basic operation
+- Distributed and scalable agent based architecture.
+- Modern, easy to use web interface.
+- Time series graphs for resources, counters, metrics and performance data.
+- Double-redundant bi-directional remote monitoring.
+- Automated alerting and notifications about status changes.
+- Rich interface for remote fact discovery.
+- Interactive status dashboard.
+- Simple, file based configuration.
+- Wide operating system support (written in Python 3).
+- Does not depend on third party software for basic operation.
 
 
-![Gullveig](/img/gullveig.png)
+## Current status
+
+Gullveig is actively developed and maintained, and is stable enough for production use - it is already used as primary
+or as an additional monitoring tool in production deployments, sizes ranging from a handful to a few hundreds of nodes.
+
+All updates and new releases are subject to the [compatibility policy](./setup/upgrading.md#compatibility).
+
+[![Gullveig](/img/gullveig.png)](./webui.md)
 
 ## License
 

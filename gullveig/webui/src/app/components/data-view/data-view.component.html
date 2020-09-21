@@ -12,9 +12,7 @@
         <tr *ngFor="let row of table.rows">
           <th>{{ row['__idx'] }}</th>
           <td *ngFor="let col of table.cols">
-          <span class="value" [class]="scalarClass(safeGet(row, col))">
-            {{ formatValue(safeGet(row, col)) }}
-          </span>
+          <span class="value" [class]="scalarClass(safeGet(row, col))">{{ formatValue(safeGet(row, col)) }}</span>
           </td>
         </tr>
         </tbody>
@@ -22,27 +20,23 @@
     </div>
   </div>
   <ng-template #notTabular>
-    <span *ngIf="isSimple(data)" class="value" [class]="scalarClass(data)">
-      {{ formatValue(data) }}
-    </span>
+    <span *ngIf="isSimple(data)" class="value" [class]="scalarClass(data)">{{ formatValue(data) }}</span>
     <div class="children" *ngIf="!isSimple(data)">
       <div *ngIf="!isArray(data)">
         <div class="item" *ngFor="let key of keysOf(data)">
           <div class="item-entry" *ngIf="isObject(data)">
             <span class="key">{{ formatValue(key) }}:</span>
             <span class="item-count" *ngIf="isArray(data[key]) && data[key].length > 1">[{{data[key].length}}]</span>
-            <span *ngIf="isSimple(data[key])" class="value" [class]="scalarClass(data[key])">
-            {{ formatValue(data[key]) }}
-        </span>
+            <span *ngIf="isSimple(data[key])" class="value"
+                  [class]="scalarClass(data[key])">{{ formatValue(data[key]) }}</span>
           </div>
           <app-data-view class="data-view" *ngIf="!isSimple(data[key])" [data]="data[key]"></app-data-view>
         </div>
       </div>
       <div *ngIf="isArray(data)">
         <div class="array-list" *ngIf="isArrayList(data); else notArrayList">
-          <span *ngFor="let item of deduplicate(data)" class="value" [class]="scalarClass(item)">
-            {{ formatValue(item) }}
-          </span>
+          <span *ngFor="let item of deduplicate(data)" class="value"
+                [class]="scalarClass(item)">{{ formatValue(item) }}</span>
         </div>
         <ng-template #notArrayList>
           <app-data-view class="data-view" *ngFor="let item of data" [data]="item"></app-data-view>

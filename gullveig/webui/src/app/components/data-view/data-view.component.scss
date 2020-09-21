@@ -51,6 +51,7 @@
 
     div.table-wrap {
       overflow: auto;
+      max-height: 60vh;
       border: 1px solid $nord2;
     }
 
@@ -102,7 +103,7 @@
 
       tbody > tr > th,
       tbody > tr > td, {
-        white-space: nowrap
+        white-space: nowrap;
       }
 
       tbody > tr > td:last-child {

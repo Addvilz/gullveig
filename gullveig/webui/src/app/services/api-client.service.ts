@@ -72,7 +72,7 @@ export declare type MetricsResponse = Array<MetricRecord>;
 export interface MetaRecord {
   ident: string;
   mod: string;
-  update_at: number;
+  updated_at: number;
   meta: object;
 }
 
