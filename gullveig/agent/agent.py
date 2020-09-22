@@ -12,7 +12,7 @@ from os import path, sched_getaffinity
 from aiohttp import ClientSession, ClientTimeout, ClientWebSocketResponse, ClientConnectorError, \
     WSServerHandshakeError, WSMsgType
 from apscheduler.events import EVENT_JOB_EXECUTED, JobExecutionEvent
-from apscheduler.executors.pool import ProcessPoolExecutor
+from apscheduler.executors.pool import ThreadPoolExecutor
 from apscheduler.schedulers.background import BackgroundScheduler
 
 from gullveig import GULLVEIG_VERSION
@@ -417,7 +417,7 @@ def start(config):
     CONTEXT['scheduler'] = BackgroundScheduler(
         logger=LOGGER,
         executors={
-            'default': ProcessPoolExecutor(max_workers=num_workers)
+            'default': ThreadPoolExecutor(max_workers=num_workers)
         }
     )
     schedule_reporting(get_runtime_modules(config['modules']), CONTEXT['scheduler'])
