@@ -1,6 +1,6 @@
 import logging
 
-from gullveig.agent.lib.package import get_package_manager
+from gullveig.agent.lib.package import create_package_manager
 
 LOGGER = logging.getLogger('gullveig-agent')
 
@@ -16,7 +16,7 @@ def supports():
 def get_report(config):
     warn_on_upgrade = config['mod_pkg'].getboolean('upgrade_warn')
 
-    manager = get_package_manager()
+    manager = create_package_manager()
 
     report = {
         'meta': {

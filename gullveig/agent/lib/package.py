@@ -46,22 +46,20 @@ class PackageManager:
 
 
 class DNFPackageManager(PackageManager):
-    def __init__(self) -> None:
-        self.dnf_base = dnf.Base()
-
     @staticmethod
     def supports() -> bool:
         return has_python_library('dnf')
 
     def list_packages(self, limit_upgradable=False) -> List[Package]:
         packages = []
-        self.dnf_base.read_comps()
-        self.dnf_base.read_all_repos()
-        self.dnf_base.update_cache()
-        self.dnf_base.fill_sack()
+        dnf_base = dnf.Base()
+        dnf_base.read_comps()
+        dnf_base.read_all_repos()
+        dnf_base.update_cache()
+        dnf_base.fill_sack()
 
-        i_query = self.dnf_base.sack.query().installed()
-        u_query = self.dnf_base.sack.query().upgrades()
+        i_query = dnf_base.sack.query().installed()
+        u_query = dnf_base.sack.query().upgrades()
 
         for pkg in i_query:
             upgrade_to_version = None
@@ -84,6 +82,8 @@ class DNFPackageManager(PackageManager):
                 pkg_license=pkg.license,
                 pkg_url=pkg.url,
             ))
+
+        del dnf_base
 
         return packages
 
@@ -150,23 +150,16 @@ class CompositePackageManager(PackageManager):
 
         return packages
 
-    @classmethod
-    def instance(cls):
-        if not hasattr(cls, 'rt_instance'):
-            __package_managers: List[PackageManager] = []
 
-            if DNFPackageManager.supports():
-                LOGGER.debug('Found supported package manager - DNF')
-                __package_managers.append(DNFPackageManager())
+def create_package_manager() -> PackageManager:
+    package_managers: List[PackageManager] = []
 
-            if APTPackageManager.supports():
-                LOGGER.debug('Found supported package manager - APT')
-                __package_managers.append(APTPackageManager())
+    if DNFPackageManager.supports():
+        LOGGER.debug('Found supported package manager - DNF')
+        package_managers.append(DNFPackageManager())
 
-            cls.rt_instance = CompositePackageManager(__package_managers)
+    if APTPackageManager.supports():
+        LOGGER.debug('Found supported package manager - APT')
+        package_managers.append(APTPackageManager())
 
-        return cls.rt_instance
-
-
-def get_package_manager() -> PackageManager:
-    return CompositePackageManager.instance()
+    return CompositePackageManager(package_managers)
