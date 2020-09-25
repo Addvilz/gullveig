@@ -1,7 +1,6 @@
 import argparse
 import asyncio
 import concurrent
-import gc
 import logging
 import signal
 import socket
@@ -131,8 +130,6 @@ def invoke_module(module, config):
 
 
 async def aggregate_pending_reports():
-    gc.collect()
-
     if 0 == len(REPORT_BUFFER):
         return None
 
@@ -492,7 +489,7 @@ def main():
                 'mod_apt': 'False',
                 'mod_osquery': 'False',
                 'mod_lwall': 'False',
-                'mod_pkg': 'True',
+                'mod_pkg': 'False',
                 'mod_collectd': 'False',
             },
             'mod_systemd': {},

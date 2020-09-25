@@ -1,5 +1,5 @@
-import importlib
 import logging
+import os
 from os import path
 
 import yaml
@@ -50,6 +50,7 @@ def get_report(config):
             return
 
     instance = osquery.SpawnInstance()
+
     try:
         instance.open(timeout=0.02)
     except BaseException as e:
@@ -162,5 +163,16 @@ def get_report(config):
                 'st': state,
                 'm': options['is_metric']
             })
+
+    px = None
+    # noinspection PyProtectedMember
+    if instance._socket:
+        # noinspection PyProtectedMember
+        (_, px) = instance._socket
+
+    del instance
+
+    if os.path.exists(px):
+        os.unlink(px)
 
     return report

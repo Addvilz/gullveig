@@ -16,16 +16,18 @@ and userspace package managers.
 Supported package management systems / tools:
 
 - APT
-- DNF
 
 Future support planned for (in order of priority):
 
+- DNF <sup>1</sup>
 - YUM
 - PIP
 - NPM
 - Gradle
 - Maven
 - Composer
+
+<sup>1</sup> DNF was enabled in 0.1.18 and disabled in 0.1.24 due to issues in DNF Python API.
 
 ## System requirements
 
@@ -36,7 +38,9 @@ For systems using APT package manager (Debian, Ubuntu, etc) - `python3-apt` pack
 APT cache must be automatically updated by the system itself - Gullveig has no root access
 and can't update APT cache on its own.
 
-### DNF support 
+### DNF support
+
+> NOTE: support for DNF is currently disabled due to issues with DNF Python API.
 
 For systems using DNF - `dnf` Python3 module must be present, provided by `python3-libdnf`.
 

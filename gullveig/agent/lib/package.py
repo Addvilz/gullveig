@@ -9,8 +9,8 @@ LOGGER = logging.getLogger('gullveig-agent')
 if has_python_library('apt'):
     import apt
 
-if has_python_library('dnf'):
-    import dnf
+# if has_python_library('dnf'):
+#     import dnf
 
 
 class PackageOrigin(Enum):
@@ -45,47 +45,47 @@ class PackageManager:
         raise RuntimeError('Not implemented')
 
 
-class DNFPackageManager(PackageManager):
-    @staticmethod
-    def supports() -> bool:
-        return has_python_library('dnf')
-
-    def list_packages(self, limit_upgradable=False) -> List[Package]:
-        packages = []
-        dnf_base = dnf.Base()
-        dnf_base.read_comps()
-        dnf_base.read_all_repos()
-        dnf_base.update_cache()
-        dnf_base.fill_sack()
-
-        i_query = dnf_base.sack.query().installed()
-        u_query = dnf_base.sack.query().upgrades()
-
-        for pkg in i_query:
-            upgrade_to_version = None
-            self_upgrade_query = u_query.filter(name=pkg.name)
-            upgrade_candidates = list(self_upgrade_query)
-
-            if len(upgrade_candidates) > 0:
-                upgrade_to_version = upgrade_candidates[0].evr
-
-            if limit_upgradable and upgrade_to_version is None:
-                continue
-
-            packages.append(Package(
-                pkg_origin=PackageOrigin.DNF,
-                pkg_name=pkg.name,
-                pkg_version=pkg.evr,
-                pkg_origin_ref=pkg.reponame,
-                pkg_latest=upgrade_to_version,
-                pkg_summary=str(pkg.summary).replace('\n', ' ').replace('  ', ' '),
-                pkg_license=pkg.license,
-                pkg_url=pkg.url,
-            ))
-
-        del dnf_base
-
-        return packages
+# class DNFPackageManager(PackageManager):
+#     @staticmethod
+#     def supports() -> bool:
+#         return has_python_library('dnf')
+#
+#     def list_packages(self, limit_upgradable=False) -> List[Package]:
+#         packages = []
+#         dnf_base = dnf.Base()
+#         dnf_base.read_comps()
+#         dnf_base.read_all_repos()
+#         dnf_base.update_cache()
+#         dnf_base.fill_sack()
+#
+#         i_query = dnf_base.sack.query().installed()
+#         u_query = dnf_base.sack.query().upgrades()
+#
+#         for pkg in i_query:
+#             upgrade_to_version = None
+#             self_upgrade_query = u_query.filter(name=pkg.name)
+#             upgrade_candidates = list(self_upgrade_query)
+#
+#             if len(upgrade_candidates) > 0:
+#                 upgrade_to_version = upgrade_candidates[0].evr
+#
+#             if limit_upgradable and upgrade_to_version is None:
+#                 continue
+#
+#             packages.append(Package(
+#                 pkg_origin=PackageOrigin.DNF,
+#                 pkg_name=pkg.name,
+#                 pkg_version=pkg.evr,
+#                 pkg_origin_ref=pkg.reponame,
+#                 pkg_latest=upgrade_to_version,
+#                 pkg_summary=str(pkg.summary).replace('\n', ' ').replace('  ', ' '),
+#                 pkg_license=pkg.license,
+#                 pkg_url=pkg.url,
+#             ))
+#
+#         del dnf_base
+#
+#         return packages
 
 
 class APTPackageManager(PackageManager):
@@ -154,9 +154,9 @@ class CompositePackageManager(PackageManager):
 def create_package_manager() -> PackageManager:
     package_managers: List[PackageManager] = []
 
-    if DNFPackageManager.supports():
-        LOGGER.debug('Found supported package manager - DNF')
-        package_managers.append(DNFPackageManager())
+    # if DNFPackageManager.supports():
+    #     LOGGER.debug('Found supported package manager - DNF')
+    #     package_managers.append(DNFPackageManager())
 
     if APTPackageManager.supports():
         LOGGER.debug('Found supported package manager - APT')

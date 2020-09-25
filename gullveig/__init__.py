@@ -2,7 +2,7 @@ import logging
 import sys
 from os import environ
 
-GULLVEIG_VERSION = '0.1.22'
+GULLVEIG_VERSION = '0.1.25'
 
 
 def bootstrap_default_logger(logger: logging.Logger):
