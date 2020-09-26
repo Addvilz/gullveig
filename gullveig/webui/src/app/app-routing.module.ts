@@ -11,6 +11,7 @@ import {HealthViewComponent} from './views/health-view/health-view.component';
 import {AboutViewComponent} from './views/about-view/about-view.component';
 import {SignInViewComponent} from './views/sign-in-view/sign-in-view.component';
 import {AuthGuard} from './auth.guard';
+import {KbViewComponent} from './views/kb-view/kb-view.component';
 
 const routes: Routes = [
   {path: '', redirectTo: 'status', pathMatch: 'full'},
@@ -32,6 +33,12 @@ const routes: Routes = [
     ]
   },
   {path: 'about', component: AboutViewComponent},
+  {
+    path: 'kb', component: KbViewComponent, canActivate: [AuthGuard],
+    children: [
+      {path: '**', component: KbViewComponent}
+    ]
+  },
   {path: 'sign-in', component: SignInViewComponent},
 ];
 

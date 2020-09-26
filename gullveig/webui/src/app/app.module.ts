@@ -3,7 +3,6 @@ import {NgModule} from '@angular/core';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MaterialModule} from '../material.module';
 import {StatusViewComponent} from './views/status-view/status-view.component';
 import {HttpClientModule} from '@angular/common/http';
@@ -28,6 +27,9 @@ import {HealthClassPipe} from './pipes/HealthClass.pipe';
 import {NoDataComponent} from './components/no-data/no-data.component';
 import {DataViewComponent} from './components/data-view/data-view.component';
 import {NgVarDirective} from './directives/ng-var.directive';
+import {KbViewComponent} from './views/kb-view/kb-view.component';
+import { MarkdownComponent } from './components/markdown/markdown.component';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -52,15 +54,17 @@ import {NgVarDirective} from './directives/ng-var.directive';
     NoDataComponent,
     MetaViewComponent,
     DataViewComponent,
-    NgVarDirective
+    NgVarDirective,
+    KbViewComponent,
+    MarkdownComponent
   ],
   imports: [
     BrowserModule,
+    NoopAnimationsModule,
     AppRoutingModule,
-    BrowserAnimationsModule,
     MaterialModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   providers: [AuthGuard],
   bootstrap: [AppComponent]

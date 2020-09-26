@@ -6,7 +6,8 @@
 */
 {
   "compilerOptions": {
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true
   },
   "files": [],
   "references": [

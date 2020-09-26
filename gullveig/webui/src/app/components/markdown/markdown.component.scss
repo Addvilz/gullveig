@@ -1,0 +1,216 @@
+@import "~nord/src/sass/nord";
+
+:host {
+  height: 100%;
+  display: flex;
+
+  .markdown-wrap {
+    height: 100%;
+    overflow: auto;
+    flex: 1;
+
+    .markdown {
+      margin: 35px 35px 250px;
+
+      ::ng-deep {
+        /** BEGIN MD STYLING **/
+        h1 {
+          font-size: 2.4em;
+          line-height: 1.2;
+          padding-bottom: 0.2em;
+          padding-top: 0.6em;
+          font-weight: 300;
+        }
+
+        h1:first-child {
+          margin-top: 0;
+          padding-top: 0;
+        }
+
+        h2 {
+          font-size: 1.8em;
+          line-height: 1.2;
+          padding-bottom: 0.2em;
+          padding-top: 0.6em;
+          font-weight: 400;
+        }
+
+        h3 {
+          font-size: 1.5em;
+          line-height: 1.2;
+          padding-bottom: 0.2em;
+          padding-top: 0.6em;
+          font-weight: 500;
+        }
+
+        h4 {
+          font-size: 1.2em;
+          line-height: 1.2;
+          padding-bottom: 0.2em;
+          padding-top: 0.6em;
+        }
+
+        h5 {
+          font-size: 1.1em;
+          line-height: 1.2;
+          padding-bottom: 0.2em;
+          padding-top: 0.6em;
+        }
+
+        h6 {
+          font-size: 1.0em;
+          line-height: 1.2;
+          padding-bottom: 0.2em;
+          padding-top: 0.6em;
+        }
+
+        h4, h5, h6 {
+          font-weight: 600;
+        }
+
+        a {
+          color: $nord4;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+          left: -24.8px;
+          display: flex;
+          align-items: center;
+          position: relative;
+
+          &:hover .header-anchor {
+            visibility: visible;
+          }
+        }
+
+        a.header-anchor {
+          font-family: 'Material Icons';
+          color: $nord10;
+          text-decoration: none;
+          font-weight: 300;
+          font-size: 18px;
+          visibility: hidden;
+          padding-right: 5px;
+        }
+
+        .hljs {
+          background: transparent;
+        }
+
+        .hljs-comment {
+          color: $nord10;
+        }
+
+        .hljs-section {
+          color: $nord14;
+        }
+
+        .hljs-attr {
+          color: $nord12;
+        }
+
+        code, pre {
+          font-family: 'SF Mono', 'source code pro', consolas, 'courier new', courier, monospace;
+        }
+
+        code {
+          color: $nord8;
+          padding: 0;
+          background: transparent;
+          font-size: inherit;
+          user-select: all;
+        }
+
+        pre {
+          border: 1px solid $nord3;
+          overflow: auto;
+          margin-bottom: 1rem;
+          padding: 0;
+        }
+
+        pre code {
+          display: block;
+          font-size: 15px;
+          user-select: auto;
+          padding: 1rem 1.5rem;
+        }
+
+        img {
+          max-width: 100%;
+        }
+
+        blockquote {
+          margin: 0;
+          padding: 1rem;
+          color: inherit !important;
+          border-left: 0.5em solid $nord10;
+          background: $nord3;
+
+          &:not(:last-child) {
+            margin-bottom: 1rem;
+          }
+
+          p:last-child {
+            margin: 0;
+          }
+        }
+
+        table {
+          display: table;
+          max-width: 100%;
+          border-collapse: collapse;
+        }
+
+        table tr:nth-child(2n) {
+          background-color: rgba(100, 100, 100, 0.05);
+        }
+
+        table th, table td {
+          border: 1px solid $nord1;
+          padding: 6px 13px;
+        }
+
+        table thead tr {
+          background-color: #323845;
+        }
+
+        hr {
+          border: none;
+          background: $nord3;
+          height: 1px;
+        }
+
+        /** END MD STYLING **/
+      }
+    }
+  }
+
+  .toc {
+    width: 250px;
+    background: lighten($nord0, 1%);
+    overflow-y: auto;
+
+    .mat-list.mat-list-base {
+      padding: 0;
+    }
+
+    .mat-list-item {
+      min-height: 26px;
+      height: auto;
+      color: #cecece;
+      box-sizing: border-box;
+
+      &:last-child {
+        margin-bottom: 100px;
+      }
+    }
+
+    ::ng-deep .mat-list-item .mat-list-item-content {
+      min-height: 26px;
+    }
+
+    ::ng-deep .mat-list-item.inner .mat-list-item-content {
+      padding-left: 32px;
+    }
+  }
+}

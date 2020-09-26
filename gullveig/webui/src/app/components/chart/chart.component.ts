@@ -1,6 +1,6 @@
 import {AfterViewChecked, AfterViewInit, Component, Input, OnDestroy, ViewChild} from '@angular/core';
 import {MetricRecord} from '../../services/api-client.service';
-import Chart from 'chart.js';
+import {Chart} from 'chart.js';
 import * as prettyBytes from 'pretty-bytes';
 
 Chart.defaults.global.responsive = true;
@@ -219,7 +219,11 @@ export class ChartComponent implements AfterViewInit, AfterViewChecked, OnDestro
     setTimeout(() => this.chart.resize(), 50);
   }
 
-  private formatValue(value: number) {
+  private formatValue(value: number | string) {
+    if (typeof value === 'string') {
+      return value;
+    }
+
     if (this.metricRecord.format === 'b') {
       return prettyBytes(value);
     }

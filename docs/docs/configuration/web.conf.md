@@ -56,3 +56,12 @@ Example:
 # admin:admin
 admin = $6$tKs0/AQLUERKxY$L/YoYlvSvU0U4n6q8q6ZWnlfTdR6tK3feDwJJRHsGWd19sXOLdFxyILG2wvXMxcxd2RwoDmtvQCTNzlUTVsna1
 ```
+
+## Section [kb]
+
+Configure knowledge base.
+
+### path
+**Default value:** `/var/lib/gullveig/kb/`
+
+Directory to look for knowledge base contents.

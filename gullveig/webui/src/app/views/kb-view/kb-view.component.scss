@@ -17,24 +17,39 @@
       background: $nord1;
       overflow-y: auto;
 
+      .mat-list.mat-list-base {
+        padding: 0;
+      }
+
       .mat-list-item {
         min-height: 26px;
         height: auto;
         color: #cecece;
+        box-sizing: border-box;
+
+        &:last-child {
+          margin-bottom: 100px;
+        }
       }
 
       ::ng-deep .mat-list-item .mat-list-item-content {
         min-height: 26px;
       }
 
+      ::ng-deep .mat-list-item.inner .mat-list-item-content {
+        padding-left: 32px;
+      }
+
       .mat-divider {
         margin-top: 10px;
+      }
+
+      .mat-subheader {
+        font-weight: 600;
       }
     }
 
     .right {
-      padding-left: 35px;
-      padding-right: 35px;
       flex: 1;
       height: 100%;
       overflow-y: auto;

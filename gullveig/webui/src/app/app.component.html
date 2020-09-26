@@ -17,6 +17,9 @@
     <a *ngIf="isKnownUser" mat-button routerLink="/meta" routerLinkActive="active">
       Meta
     </a>
+    <a *ngIf="isKnownUser" mat-button routerLink="/kb" routerLinkActive="active">
+      KB
+    </a>
     <span class="spacer"></span>
     <button *ngIf="isKnownUser" mat-icon-button class="update" (click)="emitUpdateView()"
             title="Update view"

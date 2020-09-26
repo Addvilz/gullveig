@@ -149,7 +149,10 @@ def main():
             'server': {
                 'data_dir': '/var/lib/gullveig'
             },
-            'users': {}
+            'users': {},
+            'kb': {
+                'path': '/var/lib/gullveig/kb/'
+            }
         },
         {
             'web': ['ssl_certificate', 'ssl_certificate_key', 'secret']

@@ -101,6 +101,25 @@ export interface VersionsResponse {
   web: string;
 }
 
+export interface KBNavItem {
+  name: string;
+  uri: string;
+}
+
+export interface KBNavCategory {
+  name: string;
+  items: KBNavItem[];
+}
+
+export interface KBNavView {
+  default: {items: KBNavItem[]};
+  categories: KBNavCategory[];
+}
+
+export interface KBArticle {
+  markdown: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -157,6 +176,14 @@ export class ApiClientService {
 
   fetchMeta(ident: string): Observable<MetaResponse> {
     return this.get<MetaResponse>('/meta/' + ident + '/');
+  }
+
+  fetchKbNavigation(): Observable<KBNavView> {
+    return this.get<KBNavView>('/kb/nav/');
+  }
+
+  fetchKBArticle(article): Observable<KBArticle> {
+    return this.get<KBArticle>('/kb/article/' + article);
   }
 
   public post<T>(path: string, payload: any): Observable<T> {

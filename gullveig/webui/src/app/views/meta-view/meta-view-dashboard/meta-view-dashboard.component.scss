@@ -22,6 +22,10 @@
         color: #cecece;
       }
 
+      ::ng-deep .mat-list-item .mat-list-item-content {
+        min-height: 26px;
+      }
+
       .mat-divider {
         margin-top: 10px;
       }

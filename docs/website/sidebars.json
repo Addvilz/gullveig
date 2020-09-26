@@ -1,6 +1,11 @@
 {
   "docs": {
     "Overview": ["overview", "webui", "roadmap"],
+    "Features": [
+      "features/monitoring",
+      "features/metadata",
+      "features/kb"
+    ],
     "Setup": [
       "setup/setup",
       "setup/requirements",

@@ -6,9 +6,11 @@ from crypt import crypt
 from datetime import datetime
 from functools import partial
 from hmac import compare_digest
+from os import path
 
 import aiosqlite
 import jwt
+from aiohttp import web
 from aiohttp.web import Application, RouteTableDef, Request, json_response
 from aiohttp.web_middlewares import middleware
 from aiohttp.web_response import Response
@@ -17,6 +19,7 @@ from jwt import DecodeError, InvalidTokenError
 from gullveig import GULLVEIG_VERSION
 from gullveig.common.configuration import Configuration
 from gullveig.web.dbi import DBI
+from gullveig.web.kb import create_nav, read_article
 
 LOGGER = logging.getLogger('gullveig-api')
 api = RouteTableDef()
@@ -225,8 +228,84 @@ async def list_meta_for_ident(request: Request):
     return json_response(charts)
 
 
+@api.get('/kb/nav/')
+async def kb_navigation(_: Request):
+    kb_path = CONTEXT['config']['kb']['path']
+    if not kb_path:
+        return json_response({})
+
+    if not path.exists(kb_path):
+        return json_response({})
+
+    nav = create_nav(kb_path)
+    return json_response(nav)
+
+
+@api.get(r'/kb/article/{article:.+}')
+async def kb_article_get(request: Request):
+    kb_path = CONTEXT['config']['kb']['path']
+    secret = CONTEXT['config']['web']['secret']
+
+    if not kb_path:
+        return json_response({})
+
+    if not path.exists(kb_path):
+        return json_response(
+            data={'error': 'Not Found'},
+            status=404
+        )
+
+    article = request.match_info['article']
+    content = read_article(kb_path, article, secret)
+    if content is None:
+        return json_response(
+            data={'error': 'Not Found'},
+            status=404
+        )
+    return json_response(content)
+
+
+@api.get(r'/kb/file/{kb_file:.+}')
+async def kb_file_get(request: Request):
+    kb_path = CONTEXT['config']['kb']['path']
+    secret = CONTEXT['config']['web']['secret']
+
+    if not kb_path:
+        return json_response({})
+
+    if not path.exists(kb_path):
+        return json_response(
+            data={'error': 'Not Found'},
+            status=404
+        )
+
+    kb_file = request.match_info['kb_file']
+    key_target = ('%s%s' % (secret, kb_file)).encode('UTF-8')
+    expect_key = hashlib.sha256(key_target).hexdigest()
+
+    if request.query.get('dl_key') != expect_key:
+        return json_response(
+            data={'error': 'Bad credentials'},
+            status=403
+        )
+
+    abs_file = path.abspath(path.join(kb_path, kb_file))
+
+    if not abs_file.startswith(kb_path):
+        return json_response(
+            data={'error': 'Bad WTF'},
+            status=400
+        )
+
+    return web.FileResponse(abs_file)
+
+
 @middleware
 async def auth_middleware(request: Request, handler):
+    if request.path.startswith('/api/kb/file/'):
+        # KB file auth is handled in handler
+        return await handler(request)
+
     if request.path != '/api/sign-in/':
         auth_token = request.headers.getone('x-auth-token')
         try:
@@ -254,6 +333,7 @@ async def auth_middleware(request: Request, handler):
             return Response(status=401)
 
     response = await handler(request)
+
     return response
 
 

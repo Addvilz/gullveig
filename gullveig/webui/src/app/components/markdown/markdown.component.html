@@ -1,0 +1,16 @@
+<div class="markdown-wrap" #markdownWrapper>
+  <div #markdown class="markdown" [innerHTML]="html"></div>
+</div>
+<div class="toc" *ngIf="nav.length > 0">
+  <mat-action-list dense>
+    <ng-container *ngFor="let item of nav">
+      <mat-list-item (click)="goTo(item)">
+        {{item.name}}
+      </mat-list-item>
+
+      <mat-list-item *ngFor="let item of item.children" class="inner" (click)="goTo(item)">
+        {{item.name}}
+      </mat-list-item>
+    </ng-container>
+  </mat-action-list>
+</div>

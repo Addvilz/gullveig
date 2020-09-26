@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {LoaderIndicatorService} from '../../services/loader-indicator.service';
 import {Subscription} from 'rxjs';
 
@@ -10,6 +10,7 @@ import {Subscription} from 'rxjs';
 export class NoDataComponent implements OnInit, OnDestroy {
   isLoading: boolean;
   private loaderSubscription: Subscription;
+  @Input() text: string = 'No data to display';
 
   constructor(private loader: LoaderIndicatorService) {
   }

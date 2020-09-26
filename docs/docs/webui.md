@@ -3,6 +3,8 @@ title: Web user interface
 sidebar_label: Web UI
 ---
 
+*Note:* web user interface shown bellow might not reflect the latest state of development.
+
 ## Status overview
 
 Review the overall status of all systems in the reporting domain.
@@ -26,4 +28,10 @@ Explore time series for reported metrics aggregated by second, minute, hour etc.
 View and explore various metadata agents have reported to the reporting server.
 
 ![Gullveig](/img/screens/meta.png)
+
+## Knowledge base
+
+Explore documentation and knowledge base articles.
+
+![Gullveig](/img/screens/kb.png)
 

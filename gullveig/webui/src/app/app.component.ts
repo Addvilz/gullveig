@@ -12,7 +12,6 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 })
 export class AppComponent {
   isKnownUser: boolean = this.api.isKnownUser.value;
-  private versions: VersionsResponse;
 
   constructor(
     public api: ApiClientService,

@@ -1,0 +1,22 @@
+<app-no-data *ngIf="!hasContent() && !isFetching" text="Knowledge base is empty"></app-no-data>
+<section *ngIf="hasContent() && !isFetching">
+  <div class="left">
+    <mat-action-list dense>
+      <mat-list-item
+        *ngFor="let item of navigation.default.items"
+        (click)="goTo(item)"
+        [class.active]="articleUri === item.uri">
+        {{item.name}}
+      </mat-list-item>
+      <ng-container *ngFor="let category of navigation.categories">
+        <div mat-subheader>{{category.name}}</div>
+        <mat-list-item *ngFor="let item of category.items" class="inner" (click)="goTo(item)" [class.active]="articleUri === item.uri">
+          {{item.name}}
+        </mat-list-item>
+      </ng-container>
+    </mat-action-list>
+  </div>
+  <div class="right">
+    <app-markdown basePath="/kb/article/" [markdown]="article.markdown" *ngIf="article"></app-markdown>
+  </div>
+</section>
