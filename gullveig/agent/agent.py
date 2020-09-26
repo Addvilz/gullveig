@@ -362,6 +362,8 @@ def schedule_reporting(modules, scheduler: BackgroundScheduler):
         'interval',
         seconds=get_module_delay(module['id']),
         max_instances=1,
+        misfire_grace_time=300,
+        coalesce=True,
         id=module['id'],
         name=module['id'],
         next_run_time=datetime.now(),  # Schedule first run to be ASAP
@@ -480,6 +482,10 @@ def main():
             'module_reporting': {
                 'mod_pkg_fetch_every': '600',
                 'mod_pkg_expires_after': '660',
+                'mod_facter_fetch_every': '30',
+                'mod_facter_expires_after': '120',
+                'mod_osquery_fetch_every': '15',
+                'mod_osquery_expires_after': '60',
             },
             'modules': {
                 'mod_facter': 'True',
