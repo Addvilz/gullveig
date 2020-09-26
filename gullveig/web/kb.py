@@ -3,7 +3,6 @@ import hashlib
 import re
 from os import DirEntry
 from os import scandir, path
-from re import Match
 from typing import Optional
 
 
@@ -100,7 +99,7 @@ def preprocess(
         static_path: str,
         secret: str
 ) -> str:
-    def replace_each(a: Match):
+    def replace_each(a):
         href = a.group(1)
 
         if href.startswith('//') or -1 != href.find('://'):
