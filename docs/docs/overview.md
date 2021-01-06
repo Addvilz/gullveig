@@ -26,10 +26,15 @@ that can be created using nearly any platform or programming language.
 
 ## Current status
 
-Gullveig is actively developed and maintained, and is stable enough for production use - it is already used as primary
+Gullveig is actively developed and maintained, and is stable enough for production use, with caveats<sup>[1]</sup> - it is already used as primary
 or as an additional monitoring tool in production deployments, sizes ranging from a handful to a few hundreds of nodes.
 
-All updates and new releases are subject to the [compatibility policy](./setup/upgrading.md#compatibility).
+<sup>[1]</sup> Although stable enough for production use as a tool, the architecture of the platform itself is not final and is undergoing
+extensive testing and development with production and high demand workloads. There are several major braking changes planned for 0.x version
+line before 1.x will be released as production stable, mostly to deal with architecture optimization and performance, as well as number of 
+new features.
+
+All updates and new releases after and including 1.x are subject to the [compatibility policy](./setup/upgrading.md#compatibility).
 
 [![Gullveig](/img/gullveig.png)](./webui.md)
 

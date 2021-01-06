@@ -14,7 +14,9 @@ See the [contributions policy](https://github.com/Addvilz/gullveig/blob/master/C
 
 ### Planned features
 
-- Remote configuration - ability to receive and automatically reload configuration from reporting server.
+- Migrating to complete remote configuration using node groups - agents will receive configuration from the server, exclusively.
+- Drop support for WebSockets as event transport.
+- Performance optimizations.
 
 ### Planned modules
 
@@ -36,15 +38,17 @@ See the [contributions policy](https://github.com/Addvilz/gullveig/blob/master/C
 
 ## Server
 
+- Dropping support for SQLite and replacing it with a standalone database server.
 - Metadata based monitoring (alert on key change, new items, etc.)
 - Alerting integrations other than SMTP - Pushover, Pagerduty, Opsgenie, VictorOps, Slack.
-- Automated database backups.
 - Custom data retention rules.
+- Performance optimizations.
 
 ## Web
 
 - Improve timestamps for metric charts.
 - Health history pagination.
+- Redesign graphs and charts.
 
 ## Util
 
@@ -56,3 +60,4 @@ See the [contributions policy](https://github.com/Addvilz/gullveig/blob/master/C
 
 - Support for event reporting - ability for agents to report local events remotely as a kind of "remote log". Would introduce a new section and concept in reporting - "events", with a separate section in Web. Would be useful to monitor singular events and state changes (user logins, interesting log events, etc.)
 - Support for events to be marked "audit" with special storage and retention provisions.
+- Support for "canary" events - expectation for certain events to be invoked on certain intervals. Failure to send an event will trigger an alert. 
