@@ -100,7 +100,11 @@ async def auth(request: Request):
 
     LOGGER.info('User authenticated - %s from %s', username, remote)
 
-    return json_response({'token': token.decode('ascii')})
+    decode_fun = getattr(token, 'decode', None)
+    if callable(decode_fun):
+        return json_response({'token': token.decode('ascii')})
+
+    return json_response({'token': token})
 
 
 @api.get('/ident/')
