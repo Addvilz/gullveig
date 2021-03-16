@@ -3,6 +3,23 @@ title: About Gullveig
 sidebar_label: Overview
 ---
 
+## DEPRECATED as of 16.03.2021
+
+This software is deprecated as of 16.03.2021 and will receive no further updates. If you are interested in
+taking over the development of this project, submit a GitHub ticket.
+
+### Why?
+
+I initially created Gullveig as an all-in-one alternative to Nagios, Monit etc. However, after about a year
+of private deployment I have concluded that while concept of Gullveig is still valid, it failed to
+address the main point I initially set out to solve with it - ease of management and deployment, and
+to provide ability to consistently and reliably monitor systems integrity.
+
+Because there is no need for another Grafana and Nagios, I have decided to deprecate this project
+and focus on something conceptually quite different.
+
+## About
+
 Gullveig is a free, open-source, light-weight infrastructure and service monitoring and operations support platform.
 Gullveig offers monitoring, alerting, and insights services for servers, services and applications, as well
 as other useful administrator and operations features.
@@ -26,15 +43,7 @@ that can be created using nearly any platform or programming language.
 
 ## Current status
 
-Gullveig is actively developed and maintained, and is stable enough for production use, with caveats<sup>[1]</sup> - it is already used as primary
-or as an additional monitoring tool in production deployments, sizes ranging from a handful to a few hundreds of nodes.
-
-<sup>[1]</sup> Although stable enough for production use as a tool, the architecture of the platform itself is not final and is undergoing
-extensive testing and development with production and high demand workloads. There are several major braking changes planned for 0.x version
-line before 1.x will be released as production stable, mostly to deal with architecture optimization and performance, as well as number of 
-new features.
-
-All updates and new releases after and including 1.x are subject to the [compatibility policy](./setup/upgrading.md#compatibility).
+Deprecated.
 
 [![Gullveig](/img/gullveig.png)](./webui.md)
 
